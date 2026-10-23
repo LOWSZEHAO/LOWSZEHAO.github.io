@@ -23,6 +23,8 @@ technologies:
   - Node.js (optional stdio bridge)
   - PowerShell tooling
 
+diagram: uplink-loop
+
 role: >-
   Solo research project. Mine: the problem, the requirements, the tool design, the
   verification and audits, and the comparison against Epic's own server. Not mine: most of

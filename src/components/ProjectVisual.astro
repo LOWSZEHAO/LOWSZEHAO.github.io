@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import FlexXrModules from './diagrams/FlexXrModules.astro';
 import NamesteadPipeline from './diagrams/NamesteadPipeline.astro';
+import UplinkLoop from './diagrams/UplinkLoop.astro';
 
 /*
  * Picks a project's visual, in order of how much it actually tells a reader:
@@ -26,7 +27,7 @@ const assets = import.meta.glob<{ default: ImageMetadata }>(
 interface Props {
   cover?: string | undefined;
   coverAlt?: string | undefined;
-  diagram?: 'flexxr-modules' | 'namestead-pipeline' | undefined;
+  diagram?: 'flexxr-modules' | 'namestead-pipeline' | 'uplink-loop' | undefined;
   title: string;
   variant?: 'compact' | 'full';
   loading?: 'eager' | 'lazy';
@@ -44,13 +45,13 @@ if (cover && !resolved) {
   );
 }
 
-// Card visuals render at 15-19rem wide, case-study visuals at up to 48rem.
-// `sizes` has to describe the rendered box, or the browser picks the wrong
-// srcset entry and the screenshot looks soft.
-const widths = variant === 'compact' ? [320, 640] : [760, 1140, 1520];
+// Card visuals render at 15-25rem wide depending on breakpoint, case-study
+// visuals at up to 48rem. `sizes` has to describe the rendered box, or the
+// browser picks the wrong srcset entry and the screenshot looks soft.
+const widths = variant === 'compact' ? [320, 640, 900] : [760, 1140, 1520];
 const sizes =
   variant === 'compact'
-    ? '(min-width: 52rem) 19rem, calc(100vw - 4rem)'
+    ? '(min-width: 75rem) 25rem, (min-width: 52rem) 19rem, calc(100vw - 4rem)'
     : '(min-width: 52rem) 48rem, calc(100vw - 3rem)';
 ---
 
@@ -70,6 +71,8 @@ const sizes =
     <FlexXrModules variant={variant} />
   ) : diagram === 'namestead-pipeline' ? (
     <NamesteadPipeline variant={variant} />
+  ) : diagram === 'uplink-loop' ? (
+    <UplinkLoop variant={variant} />
   ) : (
     <div class="placeholder" role="img" aria-label={`No screenshot published yet for ${title}`}>
       <span class="mark" aria-hidden="true" />

@@ -155,4 +155,20 @@ const href = url(`/projects/${id}`);
       padding: var(--space-6);
     }
   }
+
+  /*
+   * On a desktop the text column stops at its reading measure, which left
+   * several hundred pixels empty beside it while the screenshot stayed at
+   * thumbnail size. Spend the extra width on the visual, where a dense editor
+   * screenshot becomes legible rather than grey mush.
+   */
+  @media (min-width: 75rem) {
+    .project {
+      grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+    }
+
+    .project.feature {
+      grid-template-columns: minmax(0, 25rem) minmax(0, 1fr);
+    }
+  }
 </style>

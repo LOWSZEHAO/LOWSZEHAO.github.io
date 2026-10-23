@@ -102,7 +102,7 @@ const projects = defineCollection({
      * it carries real information instead of decorating the card.
      * Add a new name here and a matching branch in ProjectVisual.astro.
      */
-    diagram: z.enum(['flexxr-modules', 'namestead-pipeline']).optional(),
+    diagram: z.enum(['flexxr-modules', 'namestead-pipeline', 'uplink-loop']).optional(),
 
     /**
      * Embedded demo videos. Only ever set these alongside

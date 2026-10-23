@@ -348,21 +348,25 @@ section {
 
 /* --- status badge --------------------------------------------------------- */
 
+/* The dot sits on the first line and the label wraps beside it. `nowrap` here
+   clipped long labels like "Experimental - pre-1.0, AI-written implementation"
+   on a phone. */
 .status {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.45rem;
   font-family: var(--font-mono);
   font-size: 0.78rem;
+  line-height: 1.45;
   letter-spacing: 0.04em;
   color: var(--text-muted);
-  white-space: nowrap;
 }
 
 .status::before {
   content: "";
   width: 6px;
   height: 6px;
+  margin-top: 0.52em;
   border-radius: 50%;
   background: var(--neutral);
   flex: none;

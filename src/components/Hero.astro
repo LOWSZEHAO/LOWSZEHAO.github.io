@@ -1,59 +1,100 @@
 ---
+import { Image } from 'astro:assets';
 import { site } from '../data/site';
 import { url } from '../lib/url';
+import heroStill from '../assets/projects/vr-training/worksite-safety.jpg';
+
+/*
+ * Two columns on a wide screen. The copy alone left roughly half the first
+ * viewport empty and pushed the first piece of actual work below the fold,
+ * which is the wrong first impression for a visual discipline. The still is a
+ * real frame from shipped work and links to its case study, so it earns its
+ * place rather than decorating.
+ */
 ---
 
 <section class="hero">
-  <div class="container">
-    <p class="kicker">{site.specialisms.join('  ·  ')}</p>
+  <div class="container grid">
+    <div class="copy">
+      <p class="kicker">{site.specialisms.join('  ·  ')}</p>
 
-    <h1>{site.name}</h1>
-    <p class="role">{site.role}</p>
-    <p class="tagline">{site.tagline}</p>
+      <h1>{site.name}</h1>
+      <p class="role">{site.role}</p>
+      <p class="tagline">{site.tagline}</p>
 
-    <p class="intro measure">{site.intro}</p>
+      <p class="intro measure">{site.intro}</p>
 
-    <div class="btn-row">
-      <a class="btn btn--primary" href={url('/projects')}>
-        Explore projects <span class="arrow" aria-hidden="true">&rarr;</span>
-      </a>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/projects')}>
+          Explore projects <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
 
-      {
-        /*
-         * The CV button only exists once a real PDF does. See src/data/site.ts.
-         */
-        site.cv && (
-          <a class="btn" href={url(site.cv)} download>
-            Download CV
-          </a>
-        )
-      }
+        {
+          /* The CV button only exists once a real PDF does. See src/data/site.ts. */
+          site.cv && (
+            <a class="btn" href={url(site.cv)} download>
+              Download CV
+            </a>
+          )
+        }
 
-      <a class="btn" href={site.github} target="_blank" rel="noopener noreferrer">
-        GitHub <span class="ext" aria-hidden="true">&#8599;</span>
-      </a>
+        <a class="btn" href={site.github} target="_blank" rel="noopener noreferrer">
+          GitHub <span class="ext" aria-hidden="true">&#8599;</span>
+        </a>
 
-      {
-        site.linkedin && (
-          <a class="btn" href={site.linkedin} target="_blank" rel="noopener noreferrer">
-            LinkedIn <span class="ext" aria-hidden="true">&#8599;</span>
-          </a>
-        )
-      }
+        {
+          site.linkedin && (
+            <a class="btn" href={site.linkedin} target="_blank" rel="noopener noreferrer">
+              LinkedIn <span class="ext" aria-hidden="true">&#8599;</span>
+            </a>
+          )
+        }
+      </div>
+
+      <p class="availability faint">{site.availability}</p>
     </div>
 
-    <p class="availability faint">{site.availability}</p>
+    <figure class="still">
+      <a href={url('/projects/industrial-vr-training')}>
+        <Image
+          src={heroStill}
+          alt="First-person view in VR of a gloved hand clipping a harness carabiner onto a ladder rung, with the on-screen instruction 'Attach on ladder'."
+          widths={[440, 880, 1280]}
+          sizes="(min-width: 64rem) 26rem, calc(100vw - 3rem)"
+          format="webp"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <figcaption>
+          <span class="label">Worksite safety — fall arrest</span>
+          <span class="meta">VR training module · VirtualX</span>
+        </figcaption>
+      </a>
+    </figure>
   </div>
 </section>
 
 <style>
   .hero {
-    padding-block: clamp(3.5rem, 2rem + 8vw, 7rem) clamp(3rem, 2rem + 5vw, 5rem);
+    padding-block: clamp(3rem, 2rem + 6vw, 5.5rem) clamp(2.5rem, 2rem + 4vw, 4.5rem);
     border-bottom: 1px solid var(--border);
     /* A single, very low-contrast wash. No animated background. */
     background:
       radial-gradient(60rem 28rem at 12% -12%, rgb(79 210 255 / 6%), transparent 70%),
       var(--bg);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  @media (min-width: 64rem) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+      gap: var(--space-8);
+    }
   }
 
   h1 {
@@ -95,5 +136,58 @@ import { url } from '../lib/url';
     margin-top: var(--space-6);
     font-size: 0.86rem;
     max-width: 56ch;
+  }
+
+  /* --- the still ---------------------------------------------------------- */
+
+  .still {
+    margin: 0;
+  }
+
+  .still a {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-sunken);
+    transition: border-color var(--dur) var(--ease);
+  }
+
+  .still a:hover {
+    text-decoration: none;
+    border-color: var(--accent-edge);
+  }
+
+  .still :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .label {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-faint);
+  }
+
+  .still a:hover .label {
+    color: var(--accent-bright);
   }
 </style>
