@@ -41,7 +41,8 @@ export const site = {
 
   /** The understated availability line. Deliberately not the headline. */
   location: 'Malaysia',
-  availability: 'Based in Malaysia, open to relevant international opportunities including Australia and New Zealand.',
+  availability:
+    'Based in Malaysia, open to relevant international opportunities including Singapore, Australia and New Zealand.',
 
   /** Roughly how long I have been doing this professionally, in my own words. */
   experienceSummary: 'Three years of professional experience',

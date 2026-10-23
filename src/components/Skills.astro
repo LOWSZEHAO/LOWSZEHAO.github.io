@@ -1,16 +1,22 @@
 ---
 import { skillGroups } from '../data/skills';
+
+/*
+ * Three columns, each a heading and a set of chips. No cards and no
+ * explanatory copy: this is meant to be read in a glance, and the depth lives
+ * in the case studies. Chips reuse the site's existing `.tag` style so the
+ * section does not read as a separate badge collection.
+ */
 ---
 
 <div class="groups">
   {
     skillGroups.map((group) => (
-      <section class="card group">
+      <section class="group">
         <h3>{group.title}</h3>
-        <p class="evidence">{group.evidence}</p>
-        <ul>
+        <ul class="tags">
           {group.items.map((item) => (
-            <li>{item}</li>
+            <li class="tag">{item}</li>
           ))}
         </ul>
       </section>
@@ -21,68 +27,40 @@ import { skillGroups } from '../data/skills';
 <style>
   .groups {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-6) var(--space-5);
   }
 
-  /*
-   * Columns rather than a grid: the groups have very different lengths, and a
-   * grid stretches a two-item card to match a ten-item one next to it. Columns
-   * let each card size to its content and pack the rest underneath.
-   */
   @media (min-width: 46rem) {
     .groups {
-      display: block;
-      columns: 2;
-      column-gap: var(--space-4);
-    }
-
-    .group {
-      break-inside: avoid;
-      margin-bottom: var(--space-4);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
   .group {
-    padding: var(--space-5);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-strong);
   }
 
   h3 {
-    font-size: 1.05rem;
-    letter-spacing: -0.018em;
-  }
-
-  .evidence {
-    font-size: 0.86rem;
+    font-family: var(--font-mono);
+    font-size: 0.79rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--text-faint);
-    padding-bottom: var(--space-3);
-    border-bottom: 1px solid var(--border);
-    max-width: 58ch;
+    margin-bottom: var(--space-4);
   }
 
-  ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+  /* Slightly roomier than the card tags, since these carry the section. */
+  .tags {
+    gap: var(--space-2);
   }
 
-  li {
-    position: relative;
-    padding-left: 1rem;
-    font-size: 0.92rem;
-    color: var(--text-muted);
-  }
-
-  li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.62em;
-    width: 4px;
-    height: 1px;
-    background: var(--text-faint);
+  .tag {
+    padding: 0.3rem 0.62rem;
+    color: var(--text);
+    background: var(--surface);
+    font-size: 0.81rem;
+    white-space: normal;
   }
 </style>
