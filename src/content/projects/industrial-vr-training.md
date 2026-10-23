@@ -142,8 +142,3 @@ that is what [FlexXR](../flex-xr-framework/) and [Namestead](../namestead/) are 
 is the same problem from scratch, in the open. This work convinced me the reusable
 interaction layer underneath SOP training is the interesting engineering problem, so I built
 one I could show.
-
-## Status
-
-Ongoing professional work. The modules above are recorded from running applications; the
-recordings are cut to show the procedure rather than the full training run.
