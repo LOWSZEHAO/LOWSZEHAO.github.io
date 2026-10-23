@@ -7,9 +7,15 @@ import { site } from '../data/site';
  * URL is set) LinkedIn are the whole section.
  */
 
+/*
+ * Email and LinkedIn only. GitHub is already in the hero and the footer, and
+ * a third card here made the section read as a link dump rather than a way to
+ * reach me. No phone number: a number on a public page gets scraped, and
+ * recruiters open a conversation by email or LinkedIn. It is on the CV, which
+ * goes to people who are actually hiring.
+ */
 const channels = [
   { label: 'Email', value: site.email, href: `mailto:${site.email}`, external: false },
-  { label: 'GitHub', value: 'github.com/LOWSZEHAO', href: site.github, external: true },
   ...(site.linkedin
     ? [{ label: 'LinkedIn', value: 'LinkedIn profile', href: site.linkedin, external: true }]
     : []),
