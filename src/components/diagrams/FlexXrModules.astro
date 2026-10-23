@@ -1,0 +1,153 @@
+---
+/*
+ * The FlexXR module stack, as documented in the repository's README and
+ * architecture document. Dependencies run one way only - downward - and that
+ * rule is enforced in each module's Build.cs, not by convention.
+ *
+ * Drawn as a semantic list rather than an image so it scales, stays legible
+ * at phone width, and reads correctly to a screen reader.
+ */
+
+interface Props {
+  /** `compact` is the card visual; `full` is the in-case-study version. */
+  variant?: 'compact' | 'full';
+}
+
+const { variant = 'full' } = Astro.props;
+
+const layers = [
+  {
+    name: 'FXR_Training',
+    note: 'optional SOP layer',
+    detail: 'Knows about everything below. A game simply never loads it.',
+    state: 'planned',
+  },
+  {
+    name: 'FXR_UI  ·  FXR_Locomotion',
+    note: 'siblings',
+    detail: 'Spatial UI and motion design; teleport, smooth move, turn, climb.',
+    state: 'mixed',
+  },
+  {
+    name: 'FXR_Interaction',
+    note: 'components, solvers, detection',
+    detail: 'Knows nothing about Training. This is where the interaction feel lives.',
+    state: 'built',
+  },
+  {
+    name: 'FXR_Core',
+    note: 'platform / OpenXR layer',
+    detail: 'Pawn and rig, interactor contract, input, capability detection, event bus.',
+    state: 'built',
+  },
+];
+---
+
+<figure class:list={['stack-diagram', variant]}>
+  <ol>
+    {
+      layers.map((layer) => (
+        <li data-state={layer.state}>
+          <span class="name">{layer.name}</span>
+          <span class="note">{layer.note}</span>
+          {variant === 'full' && <span class="detail">{layer.detail}</span>}
+        </li>
+      ))
+    }
+  </ol>
+  {
+    variant === 'full' && (
+      <figcaption>
+        Dependencies run downward only, enforced in <code>Build.cs</code>. Lighter rows are
+        complete; the top rows are the phases still in progress or not started.
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .stack-diagram {
+    margin: 0;
+  }
+
+  ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--border);
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    background: var(--bg-sunken);
+    padding: var(--space-3) var(--space-4);
+    border-left: 2px solid var(--neutral);
+  }
+
+  li[data-state='built'] {
+    border-left-color: var(--ok);
+    background: var(--surface);
+  }
+
+  li[data-state='mixed'] {
+    border-left-color: var(--progress);
+  }
+
+  li[data-state='planned'] {
+    border-left-color: var(--border-strong);
+  }
+
+  .name {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  li[data-state='planned'] .name {
+    color: var(--text-faint);
+  }
+
+  .note {
+    font-size: 0.81rem;
+    color: var(--text-faint);
+  }
+
+  .detail {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    margin-top: var(--space-2);
+    max-width: 52ch;
+  }
+
+  figcaption {
+    margin-top: var(--space-3);
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    max-width: var(--measure);
+  }
+
+  figcaption code {
+    font-family: var(--font-mono);
+    font-size: 0.95em;
+  }
+
+  .compact li {
+    padding: 0.5rem var(--space-3);
+  }
+
+  .compact .name {
+    font-size: 0.79rem;
+  }
+
+  .compact .note {
+    font-size: 0.76rem;
+  }
+</style>

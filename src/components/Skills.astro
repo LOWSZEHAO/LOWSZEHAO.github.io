@@ -1,0 +1,88 @@
+---
+import { skillGroups } from '../data/skills';
+---
+
+<div class="groups">
+  {
+    skillGroups.map((group) => (
+      <section class="card group">
+        <h3>{group.title}</h3>
+        <p class="evidence">{group.evidence}</p>
+        <ul>
+          {group.items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .groups {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  /*
+   * Columns rather than a grid: the groups have very different lengths, and a
+   * grid stretches a two-item card to match a ten-item one next to it. Columns
+   * let each card size to its content and pack the rest underneath.
+   */
+  @media (min-width: 46rem) {
+    .groups {
+      display: block;
+      columns: 2;
+      column-gap: var(--space-4);
+    }
+
+    .group {
+      break-inside: avoid;
+      margin-bottom: var(--space-4);
+    }
+  }
+
+  .group {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    letter-spacing: -0.018em;
+  }
+
+  .evidence {
+    font-size: 0.86rem;
+    color: var(--text-faint);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border);
+    max-width: 58ch;
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  li {
+    position: relative;
+    padding-left: 1rem;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+
+  li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 4px;
+    height: 1px;
+    background: var(--text-faint);
+  }
+</style>

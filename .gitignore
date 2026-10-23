@@ -1,0 +1,41 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+
+# ---------------------------------------------------------------------------
+#  Media that must never reach a public repository
+# ---------------------------------------------------------------------------
+#  This repository becomes public when it is deployed to GitHub Pages. Raw
+#  capture files are both too large for GitHub (100 MB hard limit per file)
+#  and, for employer work, not yours to publish. Video belongs on YouTube as
+#  an unlisted upload, referenced by id. See README -> Video hosting.
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.wmv
+
+#  Source archives of company material, in case one is ever dropped in here.
+Portfolio_Preparation/
+*.zip
+!src/assets/**/*.zip

@@ -1,0 +1,615 @@
+/* ===========================================================================
+   Low Sze Hao - portfolio
+   Hand-written CSS. No utility framework: the whole stylesheet is smaller
+   than a framework's reset, and every token below is used.
+   =========================================================================== */
+
+/* --- tokens --------------------------------------------------------------- */
+
+:root {
+  /* Surfaces, darkest to lightest. */
+  --bg: #0b0d11;
+  --bg-sunken: #070910;
+  --surface: #11141b;
+  --surface-raised: #161a23;
+
+  --border: #222835;
+  --border-strong: #303848;
+
+  /* Text. All three clear 4.5:1 on --bg. */
+  --text: #e7eaf0;
+  --text-muted: #9aa5b5;
+  --text-faint: #7d8899;
+
+  /* The one accent. Links, focus, and small state marks - nothing decorative. */
+  --accent: #4fd2ff;
+  --accent-bright: #8ae4ff;
+  --accent-wash: rgb(79 210 255 / 10%);
+  --accent-edge: rgb(79 210 255 / 28%);
+
+  /* Status marks. */
+  --ok: #5ed6a4;
+  --progress: #f2bd6b;
+  --neutral: #8d98a8;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", "SF Mono",
+    Menlo, Consolas, "Liberation Mono", monospace;
+
+  --measure: 68ch;
+  --container: 72rem;
+  --container-narrow: 54rem;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  --ease: cubic-bezier(0.2, 0, 0.2, 1);
+  --dur: 160ms;
+
+  color-scheme: dark;
+}
+
+/* --- reset ---------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  /*
+   * 18px root instead of the browser's 16px. Every rem on the site scales with
+   * it, so the whole interface gets larger together rather than one size being
+   * patched at a time. Media-query rem units resolve against the browser's
+   * initial 16px, so the layout breakpoints below are unaffected.
+   */
+  font-size: 112.5%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Anchored sections clear the sticky header. */
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 0.98rem + 0.12vw, 1.055rem);
+  line-height: 1.62;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: break-word;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  padding: 0;
+}
+
+/* --- headings ------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.18;
+  letter-spacing: -0.021em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.5rem + 2.4vw, 3.15rem);
+  letter-spacing: -0.032em;
+}
+
+h2 {
+  font-size: clamp(1.45rem, 1.25rem + 0.9vw, 1.9rem);
+  letter-spacing: -0.026em;
+}
+
+h3 {
+  font-size: clamp(1.15rem, 1.07rem + 0.35vw, 1.3rem);
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+/* --- links ---------------------------------------------------------------- */
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  text-decoration-color: var(--accent-edge);
+  text-underline-offset: 0.22em;
+  transition: color var(--dur) var(--ease), text-decoration-color var(--dur) var(--ease);
+}
+
+a:hover {
+  color: var(--accent-bright);
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* --- layout primitives ---------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+@media (min-width: 48rem) {
+  .container {
+    padding-inline: var(--space-6);
+  }
+}
+
+.narrow {
+  max-width: var(--container-narrow);
+}
+
+main {
+  flex: 1;
+}
+
+section {
+  scroll-margin-top: 6rem;
+}
+
+.section {
+  padding-block: clamp(3rem, 2rem + 5vw, 5.5rem);
+}
+
+.section + .section {
+  border-top: 1px solid var(--border);
+}
+
+.stack > * + * {
+  margin-top: var(--space-4);
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+/* --- the small-caps mono kicker used above section titles ----------------- */
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: var(--space-3);
+}
+
+.section-head {
+  margin-bottom: var(--space-6);
+}
+
+.section-head p {
+  color: var(--text-muted);
+  max-width: var(--measure);
+  margin-top: var(--space-3);
+}
+
+/* --- buttons -------------------------------------------------------------- */
+
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--text);
+  --btn-border: var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.6rem 1.1rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.97rem;
+  font-weight: 500;
+  letter-spacing: -0.008em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.btn:hover {
+  text-decoration: none;
+  border-color: var(--accent-edge);
+  background: var(--accent-wash);
+  color: var(--text);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  --btn-bg: var(--accent);
+  --btn-fg: #04161e;
+  --btn-border: var(--accent);
+  font-weight: 600;
+}
+
+.btn--primary:hover {
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  color: #04161e;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* --- arrow that nudges on hover (the only decorative motion on the site) -- */
+
+.btn .arrow,
+.textlink .arrow {
+  transition: transform var(--dur) var(--ease);
+}
+
+.btn:hover .arrow,
+.textlink:hover .arrow {
+  transform: translateX(3px);
+}
+
+.textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  font-size: 0.97rem;
+}
+
+/* --- cards ---------------------------------------------------------------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+}
+
+/* --- tags ----------------------------------------------------------------- */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  padding: 0.18rem 0.5rem;
+  color: var(--text-muted);
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* --- status badge --------------------------------------------------------- */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neutral);
+  flex: none;
+}
+
+.status[data-state="released"]::before {
+  background: var(--ok);
+  box-shadow: 0 0 0 3px rgb(94 214 164 / 14%);
+}
+
+.status[data-state="in-progress"]::before {
+  background: var(--progress);
+  box-shadow: 0 0 0 3px rgb(242 189 107 / 14%);
+}
+
+.status[data-state="experimental"]::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+/* --- prose (Markdown case-study bodies) ----------------------------------- */
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose > * + * {
+  margin-top: var(--space-4);
+}
+
+.prose h2 {
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+  scroll-margin-top: 6rem;
+}
+
+.prose h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.prose h3 {
+  margin-top: var(--space-6);
+  color: var(--text);
+}
+
+.prose p,
+.prose li {
+  color: var(--text-muted);
+}
+
+.prose strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.3rem;
+}
+
+.prose li + li {
+  margin-top: var(--space-2);
+}
+
+.prose li::marker {
+  color: var(--text-faint);
+}
+
+.prose a {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-edge);
+}
+
+.prose blockquote {
+  border-left: 2px solid var(--accent-edge);
+  padding-left: var(--space-4);
+  color: var(--text-muted);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin-block: var(--space-6);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.34em;
+  color: var(--accent-bright);
+}
+
+.prose pre {
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th,
+.prose td {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.prose th {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.prose td {
+  color: var(--text-muted);
+}
+
+.prose img {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+}
+
+/* A standalone image in Markdown, followed by an italic line, reads as a
+   figure with a caption. Without :has() support the caption just renders as
+   ordinary text, which is a fine fallback. */
+.prose p:has(> img:only-child) {
+  margin-top: var(--space-6);
+}
+
+.prose p:has(> img:only-child) + p:has(> em:only-child) {
+  margin-top: var(--space-3);
+  font-size: 0.84rem;
+  color: var(--text-faint);
+}
+
+.prose p:has(> img:only-child) + p > em:only-child {
+  font-style: normal;
+}
+
+/* --- utilities ------------------------------------------------------------ */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: var(--space-4);
+  z-index: 100;
+  transform: translateY(-120%);
+  background: var(--accent);
+  color: #04161e;
+  padding: 0.6rem 1rem;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: transform var(--dur) var(--ease);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  text-decoration: none;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.faint {
+  color: var(--text-faint);
+}
+
+/* --- motion preference ---------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- print ---------------------------------------------------------------- */
+
+@media print {
+  :root {
+    --bg: #fff;
+    --surface: #fff;
+    --text: #111;
+    --text-muted: #333;
+    --text-faint: #555;
+    --border: #ccc;
+  }
+
+  .site-header,
+  .site-footer,
+  .skip-link {
+    display: none;
+  }
+}

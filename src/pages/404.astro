@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/url';
+import { getPublishedProjects } from '../lib/projects';
+
+const projects = await getPublishedProjects();
+---
+
+<BaseLayout
+  title="Page not found"
+  description="That page does not exist on this site."
+  path="/404"
+>
+  <section class="section">
+    <div class="container narrow">
+      <p class="kicker">Error 404</p>
+      <h1>That page does not exist.</h1>
+      <p class="lead">
+        The link may be out of date, or a project that was here is no longer published.
+      </p>
+
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/')}>
+          Home <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="btn" href={url('/projects')}>All projects</a>
+      </div>
+
+      {
+        projects.length > 0 && (
+          <div class="suggest">
+            <p class="kicker">Published case studies</p>
+            <ul>
+              {projects.map((project) => (
+                <li>
+                  <a href={url(`/projects/${project.id}`)}>{project.data.title}</a>
+                  <span class="faint"> — {project.data.category}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .lead {
+    color: var(--text-muted);
+    max-width: var(--measure);
+    margin-bottom: var(--space-6);
+  }
+
+  .suggest {
+    margin-top: var(--space-8);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border);
+  }
+
+  .suggest ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .suggest li {
+    font-size: 0.95rem;
+  }
+</style>

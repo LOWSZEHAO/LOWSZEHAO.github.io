@@ -1,0 +1,100 @@
+---
+import { sortLinks, type Project } from '../lib/projects';
+import { isExternal } from '../lib/url';
+
+interface Props {
+  links: Project['data']['links'];
+  /** `inline` for cards, `block` for the case-study header. */
+  variant?: 'inline' | 'block';
+}
+
+const { links, variant = 'inline' } = Astro.props;
+const ordered = sortLinks(links);
+
+const KIND_LABEL: Record<string, string> = {
+  source: 'Source',
+  docs: 'Docs',
+  store: 'Store',
+  demo: 'Demo',
+  video: 'Video',
+  other: 'Link',
+};
+---
+
+{
+  ordered.length > 0 && (
+    <ul class:list={['links', variant]}>
+      {ordered.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            target={isExternal(link.href) ? '_blank' : undefined}
+            rel={isExternal(link.href) ? 'noopener noreferrer' : undefined}
+          >
+            <span class="kind" aria-hidden="true">
+              {KIND_LABEL[link.kind] ?? 'Link'}
+            </span>
+            <span class="label">{link.label}</span>
+            {isExternal(link.href) && (
+              <span class="ext" aria-hidden="true">
+                &#8599;
+              </span>
+            )}
+          </a>
+          {link.note && <p class="note">{link.note}</p>}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .links {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-4);
+  }
+
+  .links.block {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .kind {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.08rem 0.3rem;
+    background: var(--bg-sunken);
+  }
+
+  a:hover .kind {
+    color: var(--accent);
+    border-color: var(--accent-edge);
+  }
+
+  .ext {
+    font-size: 0.8em;
+    color: var(--text-faint);
+  }
+
+  .note {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    max-width: 48ch;
+  }
+</style>

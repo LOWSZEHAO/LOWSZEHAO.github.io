@@ -1,0 +1,135 @@
+---
+/*
+ * Namestead's rename pipeline, as published in its documentation. The point
+ * the diagram makes is the split: name generation is pure and cannot touch an
+ * asset, so building a preview is incapable of modifying the project.
+ */
+
+interface Props {
+  variant?: 'compact' | 'full';
+}
+
+const { variant = 'full' } = Astro.props;
+
+const stages = [
+  { name: 'Selection', note: 'what you picked', impl: null },
+  { name: 'Rule chain', note: 'composable, order dependent', impl: 'pure' },
+  { name: 'Proposed names', note: 'strings, no assets touched', impl: 'pure' },
+  { name: 'Validation', note: 'refuses what would destroy data', impl: 'registry' },
+  { name: 'Preview', note: 'per-row status and reason', impl: null },
+  { name: 'Execution', note: 'engine does the rename', impl: 'IAssetTools' },
+];
+---
+
+<figure class:list={['pipeline', variant]}>
+  <ol>
+    {
+      stages.map((stage, i) => (
+        <li>
+          <span class="step">{String(i + 1).padStart(2, '0')}</span>
+          <span class="body">
+            <span class="name">{stage.name}</span>
+            {variant === 'full' && <span class="note">{stage.note}</span>}
+          </span>
+          {stage.impl && <span class="impl">{stage.impl}</span>}
+        </li>
+      ))
+    }
+  </ol>
+  {
+    variant === 'full' && (
+      <figcaption>
+        Name generation is separate from execution, so previewing cannot modify an asset. Renaming
+        goes through <code>IAssetTools::RenameAssets</code> rather than touching <code>.uasset</code>
+        files, which leaves redirectors and reference fix-up to the engine.
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .pipeline {
+    margin: 0;
+  }
+
+  ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--border);
+  }
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    background: var(--surface);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .step {
+    font-family: var(--font-mono);
+    font-size: 0.83rem;
+    color: var(--accent);
+    flex: none;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .note {
+    font-size: 0.83rem;
+    color: var(--text-faint);
+  }
+
+  .impl {
+    font-family: var(--font-mono);
+    font-size: 0.77rem;
+    color: var(--text-faint);
+    background: var(--bg-sunken);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.1rem 0.35rem;
+    flex: none;
+  }
+
+  figcaption {
+    margin-top: var(--space-3);
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    max-width: var(--measure);
+  }
+
+  figcaption code {
+    font-family: var(--font-mono);
+    font-size: 0.95em;
+    word-break: break-word;
+  }
+
+  .compact li {
+    padding: 0.42rem var(--space-3);
+  }
+
+  .compact .name {
+    font-size: 0.8rem;
+  }
+
+  .compact .impl {
+    display: none;
+  }
+</style>

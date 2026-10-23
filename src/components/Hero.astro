@@ -1,0 +1,99 @@
+---
+import { site } from '../data/site';
+import { url } from '../lib/url';
+---
+
+<section class="hero">
+  <div class="container">
+    <p class="kicker">{site.specialisms.join('  ·  ')}</p>
+
+    <h1>{site.name}</h1>
+    <p class="role">{site.role}</p>
+    <p class="tagline">{site.tagline}</p>
+
+    <p class="intro measure">{site.intro}</p>
+
+    <div class="btn-row">
+      <a class="btn btn--primary" href={url('/projects')}>
+        Explore projects <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      {
+        /*
+         * The CV button only exists once a real PDF does. See src/data/site.ts.
+         */
+        site.cv && (
+          <a class="btn" href={url(site.cv)} download>
+            Download CV
+          </a>
+        )
+      }
+
+      <a class="btn" href={site.github} target="_blank" rel="noopener noreferrer">
+        GitHub <span class="ext" aria-hidden="true">&#8599;</span>
+      </a>
+
+      {
+        site.linkedin && (
+          <a class="btn" href={site.linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn <span class="ext" aria-hidden="true">&#8599;</span>
+          </a>
+        )
+      }
+    </div>
+
+    <p class="availability faint">{site.availability}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(3.5rem, 2rem + 8vw, 7rem) clamp(3rem, 2rem + 5vw, 5rem);
+    border-bottom: 1px solid var(--border);
+    /* A single, very low-contrast wash. No animated background. */
+    background:
+      radial-gradient(60rem 28rem at 12% -12%, rgb(79 210 255 / 6%), transparent 70%),
+      var(--bg);
+  }
+
+  h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .role {
+    font-size: clamp(1.1rem, 1rem + 0.7vw, 1.4rem);
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+
+  .tagline {
+    margin-top: var(--space-3);
+    font-size: clamp(1.02rem, 0.98rem + 0.4vw, 1.2rem);
+    color: var(--text);
+    max-width: 44ch;
+    text-wrap: pretty;
+  }
+
+  .intro {
+    margin-top: var(--space-5);
+    color: var(--text-muted);
+    text-wrap: pretty;
+  }
+
+  .btn-row {
+    margin-top: var(--space-6);
+  }
+
+  .ext {
+    font-size: 0.8em;
+    color: currentColor;
+    opacity: 0.7;
+  }
+
+  .availability {
+    margin-top: var(--space-6);
+    font-size: 0.86rem;
+    max-width: 56ch;
+  }
+</style>

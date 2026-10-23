@@ -1,0 +1,191 @@
+---
+import { Image } from 'astro:assets';
+
+/*
+ * A click-to-load YouTube embed.
+ *
+ * Nothing from youtube.com is requested until the viewer presses play. With a
+ * local `poster` the page makes no third-party request at all before that
+ * click - the still is served from this site and optimised like any other
+ * image. Without one it falls back to YouTube's thumbnail CDN.
+ *
+ * Only ever render this for video you are permitted to publish. Unlisted
+ * YouTube videos are reachable by anyone with the link - treat an unlisted id
+ * on a public page as public.
+ */
+
+const posters = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/projects/**/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true },
+);
+
+interface Props {
+  /** The id only, e.g. `L2fUpbcsDbw` - not a full URL. */
+  id: string;
+  title: string;
+  /** Path under src/assets. Strongly preferred over the CDN fallback. */
+  poster?: string | undefined;
+  /** Eager-load the first poster on a page; lazy for the rest. */
+  loading?: 'eager' | 'lazy';
+}
+
+const { id, title, poster, loading = 'lazy' } = Astro.props;
+
+const resolvedPoster = poster ? posters[`/src/assets/${poster}`]?.default : undefined;
+
+if (poster && !resolvedPoster) {
+  throw new Error(
+    `Video poster not found: src/assets/${poster} (for video "${title}"). ` +
+      `Add the file, or remove the \`poster\` field to fall back to YouTube's thumbnail.`,
+  );
+}
+
+const embedSrc = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
+const watchUrl = `https://www.youtube.com/watch?v=${id}`;
+---
+
+<figure class="video" data-video>
+  <button type="button" data-play aria-label={`Play video: ${title}`}>
+    {
+      resolvedPoster ? (
+        <Image
+          src={resolvedPoster}
+          alt=""
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 52rem) 48rem, calc(100vw - 3rem)"
+          format="webp"
+          loading={loading}
+          decoding="async"
+        />
+      ) : (
+        <img
+          src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`}
+          alt=""
+          loading={loading}
+          decoding="async"
+          width="1280"
+          height="720"
+        />
+      )
+    }
+    <span class="scrim"></span>
+    <span class="play" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+        <path d="M8 5v14l11-7z"></path>
+      </svg>
+    </span>
+    <span class="caption">{title}</span>
+  </button>
+
+  <template data-embed>
+    <iframe
+      src={embedSrc}
+      title={title}
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen></iframe>
+  </template>
+
+  <noscript>
+    <p class="fallback">
+      <a href={watchUrl} rel="noopener noreferrer" target="_blank">Watch “{title}” on YouTube</a>
+    </p>
+  </noscript>
+</figure>
+
+<script>
+  // One listener per embed. This is the only JavaScript the site ships
+  // beyond Astro's link prefetch.
+  document.querySelectorAll<HTMLElement>('[data-video]').forEach((wrapper) => {
+    const button = wrapper.querySelector<HTMLButtonElement>('[data-play]');
+    const template = wrapper.querySelector<HTMLTemplateElement>('[data-embed]');
+    if (!button || !template) return;
+
+    button.addEventListener('click', () => {
+      button.replaceWith(template.content.cloneNode(true));
+      wrapper.querySelector('iframe')?.focus();
+    });
+  });
+</script>
+
+<style>
+  .video {
+    margin: 0;
+  }
+
+  [data-play] {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-sunken);
+    cursor: pointer;
+    aspect-ratio: 16 / 9;
+    transition: border-color var(--dur) var(--ease);
+  }
+
+  [data-play]:hover {
+    border-color: var(--accent-edge);
+  }
+
+  [data-play] :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(5 7 10 / 78%), rgb(5 7 10 / 6%) 58%);
+  }
+
+  .play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    display: grid;
+    place-items: center;
+    width: 3.4rem;
+    height: 3.4rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #04161e;
+    transition: scale var(--dur) var(--ease), background var(--dur) var(--ease);
+  }
+
+  [data-play]:hover .play {
+    scale: 1.06;
+    background: var(--accent-bright);
+  }
+
+  .caption {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    padding: var(--space-4);
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-sunken);
+  }
+
+  .fallback {
+    margin-top: var(--space-2);
+    font-size: 0.88rem;
+  }
+</style>

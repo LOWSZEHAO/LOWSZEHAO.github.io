@@ -1,0 +1,55 @@
+---
+import { site } from '../data/site';
+import { url, absoluteUrl } from '../lib/url';
+import '../styles/global.css';
+
+interface Props {
+  /** Page-specific title. The site name is appended automatically. */
+  title: string;
+  description: string;
+  /** Path of this page, used for the canonical URL. */
+  path: string;
+  /** Open Graph type. 'article' for case studies. */
+  type?: 'website' | 'article';
+  /** Path to a page-specific social image under /public, if one exists. */
+  image?: string;
+  imageAlt?: string;
+}
+
+const { title, description, path, type = 'website', image, imageAlt } = Astro.props;
+
+const fullTitle = title === site.name ? `${site.name} — ${site.role}` : `${title} — ${site.name}`;
+
+const origin = Astro.site ?? new URL('http://localhost:4321');
+const canonical = absoluteUrl(path, origin);
+const ogImage = absoluteUrl(image ?? '/og.png', origin);
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+<link rel="apple-touch-icon" href={url('/favicon.svg')} />
+<meta name="theme-color" content="#0b0d11" />
+<meta name="color-scheme" content="dark" />
+
+<meta name="author" content={site.name} />
+<meta name="generator" content={Astro.generator} />
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={imageAlt ?? `${site.name} — ${site.role}`} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<link rel="sitemap" href={url('/sitemap-index.xml')} />

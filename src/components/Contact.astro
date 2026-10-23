@@ -1,0 +1,88 @@
+---
+import { site } from '../data/site';
+
+/*
+ * No contact form. A static site has no backend to receive one, and a form
+ * that silently does nothing is worse than a link. Email, GitHub and (once the
+ * URL is set) LinkedIn are the whole section.
+ */
+
+const channels = [
+  { label: 'Email', value: site.email, href: `mailto:${site.email}`, external: false },
+  { label: 'GitHub', value: 'github.com/LOWSZEHAO', href: site.github, external: true },
+  ...(site.linkedin
+    ? [{ label: 'LinkedIn', value: 'LinkedIn profile', href: site.linkedin, external: true }]
+    : []),
+];
+---
+
+<div class="contact">
+  <p class="lead measure">
+    Email is quickest. Happy to walk through any of these projects in detail, including the
+    unfinished parts.
+  </p>
+
+  <ul class="channels">
+    {
+      channels.map((channel) => (
+        <li class="card">
+          <span class="label">{channel.label}</span>
+          <a
+            href={channel.href}
+            target={channel.external ? '_blank' : undefined}
+            rel={channel.external ? 'noopener noreferrer' : undefined}
+          >
+            {channel.value}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="faint note measure">{site.availability}</p>
+</div>
+
+<style>
+  .lead {
+    color: var(--text-muted);
+  }
+
+  .channels {
+    list-style: none;
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  @media (min-width: 40rem) {
+    .channels {
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: var(--space-4);
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.77rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  li a {
+    font-size: 0.95rem;
+    font-weight: 500;
+    word-break: break-word;
+  }
+
+  .note {
+    margin-top: var(--space-5);
+    font-size: 0.86rem;
+  }
+</style>

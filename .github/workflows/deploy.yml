@@ -1,0 +1,80 @@
+name: Deploy to GitHub Pages
+
+# Runs on every push to the deployment branch, and can be started by hand from
+# the Actions tab. Change `main` here if you deploy from a different branch.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: the build job needs nothing but the code, and only the
+# deploy job is allowed to publish.
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  # Let an in-flight deployment finish rather than cancelling it half-done.
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          # Matches the `engines.node` field in package.json.
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        # `npm ci` installs exactly what package-lock.json pins, and fails if
+        # the lockfile and package.json disagree - so a build here is
+        # reproducible from a clean checkout.
+        run: npm ci
+
+      - name: Configure GitHub Pages
+        # Sets the base path and site URL for this repository. astro.config.mjs
+        # derives both from GITHUB_REPOSITORY, so a user site
+        # (LOWSZEHAO.github.io) and a project site both work with no edit.
+        uses: actions/configure-pages@v6
+
+      - name: Type check
+        run: npx astro check
+
+      - name: Build
+        run: npx astro build
+
+      - name: Verify the build
+        # Fails the workflow if an unapproved project leaked into the output,
+        # an internal link is broken, or the base path is wrong - before any of
+        # it is published.
+        run: npm run verify
+
+      - name: Upload the Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write # to publish to GitHub Pages
+      id-token: write # to verify the deployment originates from this workflow
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
