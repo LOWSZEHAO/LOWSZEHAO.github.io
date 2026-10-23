@@ -8,10 +8,16 @@ applied and removed from here.
 
 ---
 
-## 1. Blocking
+## 0. Live
 
-- [ ] **Push the site and confirm it is live.** Nothing is public yet. README → *Deployment to
-      GitHub Pages*. Any repository name works.
+**<https://lowszehao.github.io/portfolio/>** — deployed 23 October 2026.
+
+Every push to `main` rebuilds and redeploys automatically. The workflow type-checks, builds
+and runs `npm run verify` before publishing, so a broken link or a leaked draft stops the
+deployment instead of shipping.
+
+To move to the shorter `lowszehao.github.io/`, rename the repo to `LOWSZEHAO.github.io` on
+GitHub — `astro.config.mjs` detects it and adjusts the base path with no code change.
 
 ---
 
