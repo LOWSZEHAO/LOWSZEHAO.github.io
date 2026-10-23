@@ -136,9 +136,3 @@ The recordings are here. The following deliberately are not:
 - **Source code and the company's internal framework architecture.** It is my employer's, not
   mine to publish, regardless of how much of it I wrote.
 - **Anything commercially sensitive** — scope, commercial terms, internal systems.
-
-If you are evaluating me technically and want code I can publish and defend line by line,
-that is what [FlexXR](../flex-xr-framework/) and [Namestead](../namestead/) are for. FlexXR
-is the same problem from scratch, in the open. This work convinced me the reusable
-interaction layer underneath SOP training is the interesting engineering problem, so I built
-one I could show.
