@@ -25,9 +25,9 @@ npm install
 npm run dev
 ```
 
-Then open **<http://localhost:4321/portfolio/>** — note the `/portfolio/` path. That is
-deliberate: the local dev server uses the same base path a GitHub Pages *project site* uses,
-so a hard-coded link that would break after deployment breaks on your machine first.
+Then open **<http://localhost:4321/>**. The dev server uses the same base path as production,
+so a hard-coded link that would break after deployment breaks on your machine first. If you
+rename the repository, update `LOCAL_REPO_NAME` in `astro.config.mjs` to match.
 
 | Command | Does |
 | --- | --- |
@@ -270,20 +270,20 @@ draft stops the deployment rather than shipping.
 
 ### 1. Create the repository
 
-You have two options, and **the repository name decides the URL**:
+This repository is **`LOWSZEHAO.github.io`**, which GitHub serves at the domain root. The
+name decides the URL:
 
 | Repository name | Published at | Base path |
 | --- | --- | --- |
-| `portfolio` (or any name) | `https://lowszehao.github.io/portfolio/` | `/portfolio/` |
 | `LOWSZEHAO.github.io` | `https://lowszehao.github.io/` | `/` |
+| any other name | `https://lowszehao.github.io/<name>/` | `/<name>/` |
 
-`astro.config.mjs` derives both from `GITHUB_REPOSITORY` inside Actions, so **either name
-works with no edit**. If you pick a project-site name other than `portfolio`, update
-`LOCAL_REPO_NAME` in `astro.config.mjs` so your local dev server matches — that only affects
-localhost, never the deployment.
+`astro.config.mjs` derives both from `GITHUB_REPOSITORY` inside Actions, so **either shape
+works with no edit**. If you rename, update `LOCAL_REPO_NAME` in `astro.config.mjs` so the
+dev server matches — that only affects localhost, never the deployment.
 
-Create it on GitHub as a **public** repository (GitHub Pages needs a paid plan for private
-ones).
+The repository must be **public**: GitHub Pages from a private repository requires a paid
+plan (Pro or above).
 
 ### 2. Push the code
 

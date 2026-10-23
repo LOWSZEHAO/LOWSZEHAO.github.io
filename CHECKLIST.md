@@ -10,14 +10,13 @@ applied and removed from here.
 
 ## 0. Live
 
-**<https://lowszehao.github.io/portfolio/>** — deployed 23 October 2026.
+**<https://lowszehao.github.io/>** — deployed 23 October 2026.
 
 Every push to `main` rebuilds and redeploys automatically. The workflow type-checks, builds
 and runs `npm run verify` before publishing, so a broken link or a leaked draft stops the
 deployment instead of shipping.
 
-To move to the shorter `lowszehao.github.io/`, rename the repo to `LOWSZEHAO.github.io` on
-GitHub — `astro.config.mjs` detects it and adjusts the base path with no code change.
+The repository is `LOWSZEHAO.github.io`, which GitHub serves at the domain root.
 
 ---
 

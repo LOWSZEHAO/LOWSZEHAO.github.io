@@ -16,10 +16,10 @@ import sitemap from '@astrojs/sitemap';
  *  In GitHub Actions both are derived from GITHUB_REPOSITORY, so a clean
  *  checkout of either repo name deploys correctly with no edit here.
  *
- *  Locally there is no GITHUB_REPOSITORY, so the fallbacks below apply. The
- *  local default is deliberately the *project site* shape: `npm run dev`
- *  serves from /portfolio/ so that a hard-coded root-absolute path shows up
- *  as a broken link on your machine instead of only after deployment.
+ *  Locally there is no GITHUB_REPOSITORY, so the fallbacks below apply.
+ *  LOCAL_REPO_NAME is set to the real repository name so `npm run dev` serves
+ *  at the same base path as production - change it if you rename the repo,
+ *  and `npm run verify` will catch any link that assumed the old one.
  *
  *  To override (custom domain, Netlify, Cloudflare Pages, a different repo
  *  name you want to preview locally) set SITE_URL and/or SITE_BASE in the
@@ -29,8 +29,8 @@ import sitemap from '@astrojs/sitemap';
 /** Your GitHub account name. Change this if the account ever changes. */
 const GITHUB_OWNER = 'LOWSZEHAO';
 
-/** Repo name assumed when running locally. Match whatever you actually create. */
-const LOCAL_REPO_NAME = 'portfolio';
+/** Must match the real repository name, or local dev and production differ. */
+const LOCAL_REPO_NAME = 'LOWSZEHAO.github.io';
 
 // "owner/repo" in GitHub Actions; empty everywhere else.
 const [actionsOwner, actionsRepo] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
