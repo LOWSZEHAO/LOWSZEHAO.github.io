@@ -39,3 +39,6 @@ Thumbs.db
 Portfolio_Preparation/
 *.zip
 !src/assets/**/*.zip
+
+# Personal working notes — kept local, not published.
+CHECKLIST.md
