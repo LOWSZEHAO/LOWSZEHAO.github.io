@@ -20,16 +20,8 @@ export async function getFeaturedProjects(): Promise<Project[]> {
 }
 
 const SECTIONS = [
-  {
-    key: 'professional' as const,
-    title: 'Professional work',
-    blurb: 'Built for an employer. Client names and source stay private.',
-  },
-  {
-    key: 'personal' as const,
-    title: 'Personal projects',
-    blurb: 'My own. Source and decision records are open where the licence allows.',
-  },
+  { key: 'professional' as const, title: 'Professional work' },
+  { key: 'personal' as const, title: 'Personal projects' },
 ];
 
 /** Published projects split into the two sections the Projects page shows. */

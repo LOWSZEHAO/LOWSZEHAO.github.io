@@ -27,7 +27,6 @@ let cardIndex = 0;
             <section class="group" aria-labelledby={`group-${group.key}`}>
               <div class="group-head">
                 <h2 id={`group-${group.key}`}>{group.title}</h2>
-                <p>{group.blurb}</p>
               </div>
 
               <div class="project-list">
@@ -62,12 +61,6 @@ let cardIndex = 0;
 
   .group-head h2 {
     font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-  }
-
-  .group-head p {
-    color: var(--text-faint);
-    font-size: 0.92rem;
-    margin: 0;
   }
 
   .project-list {
