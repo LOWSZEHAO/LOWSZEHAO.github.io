@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Skills from '../components/Skills.astro';
 import Contact from '../components/Contact.astro';
 import { site, experience, education, languages } from '../data/site';
-import { url } from '../lib/url';
 ---
 
 <BaseLayout
@@ -88,13 +87,6 @@ import { url } from '../lib/url';
 
         <h2>Languages</h2>
         <p>{languages.join(' · ')}</p>
-
-        <h2>Short on time?</h2>
-        <p>
-          <a href={url('/projects/flex-xr-framework')}>FlexXR</a> for C++ and architecture.{' '}
-          <a href={url('/projects/namestead')}>Namestead</a> for shipped, tested tooling. Both
-          state what is unfinished as plainly as what works.
-        </p>
       </div>
     </div>
   </section>
