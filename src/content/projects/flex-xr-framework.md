@@ -32,9 +32,7 @@ links:
   - label: LOWSZEHAO/Flex_XR_Framework
     href: https://github.com/LOWSZEHAO/Flex_XR_Framework
     kind: source
-    note: >-
-      Public for review, including the architecture document and ten decision records. The
-      licence grants no usage rights — it is open for reading, not reuse.
+    note: Public for review.
 statusBreakdown:
   - label: Phase 1 — FXR_Core
     state: done
