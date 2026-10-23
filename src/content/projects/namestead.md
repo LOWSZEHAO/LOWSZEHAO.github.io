@@ -35,7 +35,6 @@ links:
   - label: Full documentation
     href: https://lowszehao.github.io/namestead-docs/#getting-started
     kind: docs
-    note: Every rule type, the folder plan, the health report, both commandlets, and how to write a rule in your own module.
 statusBreakdown:
   - label: Rename with live preview
     state: done

@@ -32,7 +32,6 @@ links:
   - label: LOWSZEHAO/Uplink
     href: https://github.com/LOWSZEHAO/Uplink
     kind: source
-    note: Public. Read the disclosure on this page before reading the code as a sample of my C++.
 
 statusBreakdown:
   - label: Native MCP server in the editor
