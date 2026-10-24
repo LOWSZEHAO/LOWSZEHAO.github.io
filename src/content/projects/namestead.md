@@ -195,22 +195,3 @@ Neither finds what the other does, and both have caught a real defect. The test 
 the build pass could not: three rule sets shipped as assets loaded on 5.8 and on nothing
 older, because a package carries the version of the engine that saved it. They are built in
 code now.
-
-## Current status and limitations
-
-Released and feature-complete for what v1.0 set out to do.
-
-| Engine | On Fab | Tests |
-| --- | --- | --- |
-| 5.8 | Yes — developed against | 56 of 56 pass |
-| 5.7 | Yes | 56 of 56 pass |
-| 5.6 | Yes | 56 of 56 pass |
-| 5.5 | No | 56 of 56 pass |
-| 5.4 | No | 56 of 56 pass |
-
-- **Win64 only.** There is no platform-specific code in it, so it would very likely build and
-  run on a macOS or Linux editor. It is restricted because it has never been run on one.
-- **No Ctrl+Z for an asset rename**, for the structural reason above. The recorded history and
-  its reverse-run are the mitigation, and they are presented as a preview rather than an undo.
-- **Renaming an asset placed in a level leaves a redirector**, unconditionally. The engine
-  refuses to load map packages for reference fix-up, so it is reported rather than hidden.
