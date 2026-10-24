@@ -115,19 +115,3 @@ The two genuine gaps I found, checked against the 5.8 source in both languages:
   property path from an actor into a component's structs.
 
 That whole exercise is the research output, more than the plugin is.
-
-## Honest limitations
-
-- **Pre-1.0.** The API may still change.
-- **No authentication unless you ask for one.** It binds loopback only and refuses to start if
-  the engine's listener has been pointed off-loopback, but on your own machine it is open by
-  design. Neither this nor Epic's is safe to expose beyond the local machine.
-- **`call_function` calls arbitrary UFUNCTIONs, deliberately.** That is what makes most of the
-  engine reachable without a tool per feature. It also means the blast radius is anything
-  Blueprint could do.
-- **Audits keep finding shipped calls that reported success while doing the wrong thing** — a
-  scenario runner that never validated its own step parameters; a test runner that could see
-  429 of 6,432 tests and answered "no tests match" for the rest; a colour write that imported
-  nothing and agreed with itself on read-back. Each had been green for months. That is the
-  honest state of it, and it is also the argument for why the trustworthiness work is the
-  interesting part.
