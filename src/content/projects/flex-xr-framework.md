@@ -163,21 +163,3 @@ rather than a fix: it works only because *this project* names those folders.
 **A grab that silently overwrote authored scale.** A grip point beneath a mesh inherits that
 mesh's scale, so the relative transform divides the scale by itself and yields a unit-scale
 offset. Grab never writes scale now, handled centrally rather than guarded at each call site.
-
-## Current status and limitations
-
-Three phases complete, phase 3 in progress, 4 to 6 not started. The things I would raise
-myself:
-
-- **Candidate-selection hysteresis is documented but never implemented.** Highlight flicker
-  between two adjacent objects is a real gap.
-- **The scoring policy is marked `Blueprintable` but its scoring method is a plain C++
-  virtual.** A Blueprint subclass compiles and its override is never called, which is worse
-  than not being extensible at all.
-- **The plugin is not self-contained for packaging**, as above. Worth fixing before any 1.0
-  claim.
-- **A black tearing artifact at the outer edge of the right eye on Quest** is open and
-  accepted as minor. Foveated rendering is ruled out from device logs rather than inferred;
-  image-based variable-rate shading is the next candidate.
-- **There are no demo recordings yet.** The architecture diagrams are real; the clips are not
-  recorded, and this page does not pretend otherwise.
