@@ -95,17 +95,16 @@ Across all four, the same systems are doing the work:
 - **Step-driven procedure.** The current instruction is stated in world space — *"Attach on
   ladder"*, *"Attach at the victim's injured leg"* — and the trainee advances by performing
   it, not by clicking past it.
-- **Guidance that points without doing the work for you.** Attachment points are highlighted,
-  direction markers show where the next action belongs, and the cue is scoped to the thing
-  that matters rather than lighting the whole scene. How much guidance appears is the
+- **Guidance that points without doing the work for you.** Attachment points are highlighted
+  and direction markers show where the next action belongs. How much guidance appears is the
   difference between a walkthrough and an assessment.
 - **Hand interaction with the real equipment.** Carabiners, harness lines, splints, straps,
-  spine boards, rigging. The interaction has to behave the way the physical object does, or
-  the muscle memory it builds is the wrong muscle memory.
+  spine boards, rigging — each behaving the way the physical object does, or the muscle memory
+  it builds is the wrong one.
 - **Spatial UI.** Action panels and step navigation placed in the world, legible at VR
   resolution and reachable without leaving the task.
-- **Two platforms.** These run on Windows PC VR and on Android standalone headsets, which is a
-  very different performance budget for the same content.
+- **Two platforms.** Windows PC VR and Android standalone headsets — a very different
+  performance budget for the same content.
 
 ## My role
 

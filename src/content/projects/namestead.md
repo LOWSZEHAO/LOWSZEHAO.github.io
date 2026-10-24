@@ -69,8 +69,8 @@ your project.
 Namestead starts from one idea: **define what a correct name and location look like once, as a
 chain of rules**. That one definition then does three jobs — bulk rename with a live preview,
 project-wide enforcement through the engine's own Data Validation, and whole-project
-reporting — all of it runnable headless, with CSV output and exit codes a build step can act
-on. Nothing is renamed until it has been previewed.
+reporting. All of it runs headless, with exit codes a build step can act on, and nothing is
+renamed until it has been previewed.
 
 Released on Fab for Unreal Engine 5.6, 5.7 and 5.8.
 
@@ -186,12 +186,9 @@ Also refused: World Partition and One File Per Actor maps, whose external actors
 leaves behind; two assets in one batch heading for the same name; and engine or script content.
 
 **Two verification passes that each catch what the other cannot.** One packages against every
-installed engine with `-StrictIncludes`, which disables the precompiled header and the unity
-build so every header has to compile on its own. The other builds a throwaway host project per
-engine and runs the whole suite with `-DisableAdaptiveUnity`, forcing translation units
-together.
+installed engine with `-StrictIncludes`, so every header has to compile on its own. The other
+runs the suite per engine with `-DisableAdaptiveUnity`, forcing translation units together.
 
 Neither finds what the other does, and both have caught a real defect. The test pass found one
-the build pass could not: three rule sets shipped as assets loaded on 5.8 and on nothing
-older, because a package carries the version of the engine that saved it. They are built in
-code now.
+the build pass could not: three rule sets shipped as assets loaded on 5.8 and nothing older,
+because a package carries the version of the engine that saved it.

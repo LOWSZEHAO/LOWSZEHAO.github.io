@@ -96,16 +96,12 @@ Unreal 5.8 ships a first-party MCP server, experimental and off by default. Comp
 properly is the part of this project I would most want to be asked about, because it is the
 part where my own conclusions were wrong first.
 
-An earlier version of my write-up claimed Epic's server could not author a Blueprint event
-graph. That was wrong. I had grepped the C++ toolsets — but several of Epic's are written in
-**Python**, registered into the same registry the server reads, including a 74 KB Blueprint
-toolset and a 114 KB S-expression DSL that writes and compiles a whole graph. A second
-claim, that it injected no input at all, was wrong the same way: it injects at the Slate
-layer, which a grep for `PlayerController` or `EnhancedInput` cannot find.
+Two of my earlier claims about it were wrong, both because I had grepped only the C++
+toolsets: several of Epic's are written in Python. I corrected them in the repository rather
+than deleting them.
 
-I corrected both in the repository rather than quietly deleting them. Where Epic is ahead, I
-say so: their UMG tooling does tree surgery mine does not, they ship a Gameplay Ability
-System toolset and I do not, and Niagara and PCG are far deeper there — 56 Niagara tools
+Where Epic is ahead I say so: their UMG tooling does tree surgery mine does not, they ship a
+Gameplay Ability System toolset and I do not, and Niagara is far deeper there — 56 tools
 against 9.
 
 The two genuine gaps I found, checked against the 5.8 source in both languages:
