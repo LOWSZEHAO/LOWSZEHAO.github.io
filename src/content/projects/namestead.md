@@ -24,8 +24,8 @@ technologies:
   - PowerShell build and test automation
   - Fab distribution
 role: >-
-  Sole author. Product design, the Slate panel, the test suite, the multi-engine build and
-  test scripts, the documentation, and the Fab submission.
+  Sole author. Product design, the Slate panel, the test suite, the documentation, and the
+  Fab submission.
 cover: projects/namestead/panel-preview.png
 coverAlt: The Namestead panel showing a rename preview, with each asset's current name, proposed name and status.
 links:
@@ -54,9 +54,6 @@ statusBreakdown:
   - label: Audit and organize commandlets
     state: done
     note: Headless naming, unreferenced, empty-folder, duplicate-import and organization reports, with CSV output and exit codes a build step can act on.
-  - label: Automated tests
-    state: done
-    note: 56 test groups covering rules, discovery, validation, preview, execution reporting, presets, conventions, auditing, organizing and actor renaming. They create no assets, so they run anywhere.
   - label: Platforms
     state: in-progress
     note: Win64 only, because it has never been run on a macOS or Linux editor. There is no platform-specific code in it — that restriction is a statement about what has been tested, not about what works.
@@ -98,7 +95,7 @@ The goals that followed:
 ## My role
 
 Sole author. Product design, the Slate panel, the validation and safety behaviour, the test
-suite, the multi-engine verification scripts, the documentation site, and the Fab submission.
+suite, the documentation site, and the Fab submission.
 
 The source is not public: it is a commercial product. This case study is written to stand on
 its own, from the published documentation and behaviour.
