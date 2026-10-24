@@ -324,10 +324,3 @@ Released and feature-complete for what v1.0 set out to do. The limits worth stat
 - **The source is not public.** This case study is deliberately written to be checkable
   without it: the documentation describes every behaviour claimed here, and the plugin itself
   is the artefact.
-
-## Next steps
-
-- macOS and Linux editor support, which is a testing exercise rather than a porting one.
-- Older engine versions on the listing, which Epic allows by request.
-- Making the folder plan and the convention easier to adopt mid-project, where the first run
-  produces the largest and least reviewable batch.

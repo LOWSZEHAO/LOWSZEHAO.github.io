@@ -63,8 +63,7 @@ statusBreakdown:
 ## Overview
 
 FlexXR is a C++ interaction framework for Unreal Engine 5.8, built as one plugin with six
-modules and strictly one-way dependencies. It is my own project, and it is the piece of work
-I would most want to be interviewed about.
+modules and strictly one-way dependencies. It is my own project.
 
 The design bet is that **one interaction layer can serve two markets that normally get
 separate codebases**: step-based industrial procedure training, and higher-fidelity VR
