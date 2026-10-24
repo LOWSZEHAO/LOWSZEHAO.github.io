@@ -38,8 +38,11 @@
     Menlo, Consolas, "Liberation Mono", monospace;
 
   --measure: 68ch;
-  --container: 72rem;
-  --container-narrow: 54rem;
+  /* Sized so the page stays ~1300px / ~980px wide at the root size set on
+     `html` below. If you change that size, scale these the other way so the
+     layout does not balloon with the type. */
+  --container: 65rem;
+  --container-narrow: 49rem;
 
   --radius: 10px;
   --radius-sm: 6px;
@@ -74,12 +77,22 @@
 
 html {
   /*
-   * 18px root instead of the browser's 16px. Every rem on the site scales with
-   * it, so the whole interface gets larger together rather than one size being
-   * patched at a time. Media-query rem units resolve against the browser's
-   * initial 16px, so the layout breakpoints below are unaffected.
+   * ======================================================================
+   *  THE TYPE SIZE KNOB
+   * ======================================================================
+   *  20px root instead of the browser's 16px. Every rem on the site scales
+   *  with it, so the whole interface grows together rather than one size
+   *  being patched at a time. Change this one value to resize everything:
+   *
+   *      112.5% = 18px    125% = 20px    137.5% = 22px
+   *
+   *  Media-query rem units resolve against the browser's initial 16px, so
+   *  the layout breakpoints further down are unaffected by this. The two
+   *  container widths above are the only things that need adjusting
+   *  alongside it.
+   * ======================================================================
    */
-  font-size: 112.5%;
+  font-size: 125%;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   /* Anchored sections clear the sticky header. */
