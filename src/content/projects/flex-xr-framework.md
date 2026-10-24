@@ -25,8 +25,8 @@ technologies:
   - GitHub Actions
   - Git LFS
 role: >-
-  Sole author. Architecture, all C++, the architecture decision records, the automation
-  tests, and the Quest standalone bring-up.
+  Sole author. Architecture, the decision records, the automation tests, and the Quest
+  standalone bring-up.
 diagram: flexxr-modules
 links:
   - label: LOWSZEHAO/Flex_XR_Framework
@@ -98,14 +98,13 @@ The goals that shaped the architecture:
 
 ## My role
 
-Sole author. I designed the module architecture and wrote all of it: the C++, the
-architecture document, the ten decision records, the automation tests, and the Quest
-standalone bring-up — including diagnosing the two platform bugs below.
+Sole author. I designed the module architecture, wrote the architecture document and the ten
+decision records, built the automation tests, and did the Quest standalone bring-up —
+including diagnosing the two platform bugs below.
 
-There is no team contribution to disentangle here, and nothing in the repository was generated
-for me. The decision records are the clearest evidence of how I work: each one states the
-obvious Unreal approach, why it was rejected, what was accepted instead, and what the reversal
-path is.
+The decision records are the clearest evidence of how I work: each one states the obvious
+Unreal approach, why it was rejected, what was accepted instead, and what the reversal path
+is.
 
 ## Technical implementation
 

@@ -24,8 +24,8 @@ technologies:
   - PowerShell build and test automation
   - Fab distribution
 role: >-
-  Sole author. Product design, all C++, the Slate panel, the test suite, the multi-engine
-  build and test scripts, the documentation, and the Fab submission.
+  Sole author. Product design, the Slate panel, the test suite, the multi-engine build and
+  test scripts, the documentation, and the Fab submission.
 cover: projects/namestead/panel-preview.png
 coverAlt: The Namestead panel showing a rename preview, with each asset's current name, proposed name and status.
 links:
@@ -99,9 +99,9 @@ The goals that followed:
 
 ## My role
 
-Sole author. Product design, all of the C++, the Slate panel, the validation and safety
-behaviour, the test suite, the two multi-engine verification scripts, the documentation site,
-and the Fab submission.
+Sole author. Product design, the Slate panel, the validation and safety behaviour, the test
+suite, the two multi-engine verification scripts, the documentation site, and the Fab
+submission.
 
 The source is not public: it is a commercial product. This case study is written to stand on
 its own, from the published documentation and behaviour rather than implementation detail
