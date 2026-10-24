@@ -75,8 +75,7 @@ project-wide enforcement through the engine's own Data Validation, and whole-pro
 reporting — all of it runnable headless, with CSV output and exit codes a build step can act
 on. Nothing is renamed until it has been previewed.
 
-Released on Fab for Unreal Engine 5.6, 5.7 and 5.8. This page describes the software, not
-sales: I have no commercial results to claim.
+Released on Fab for Unreal Engine 5.6, 5.7 and 5.8.
 
 ## Problem and goals
 
