@@ -88,8 +88,8 @@ What shaped the architecture:
 
 ## My role
 
-Sole author. Architecture, the C++, the ten decision records, the automation tests, and the
-Quest standalone bring-up.
+Sole author. Architecture, the ten decision records, the automation tests, and the Quest
+standalone bring-up.
 
 ## Technical implementation
 

@@ -53,24 +53,6 @@ statusBreakdown:
     note: Pre-1.0. The API may still change, and it has mileage on one developer's projects only.
 ---
 
-## What this is, and what it is not
-
-**This is a research project, and most of its implementation was written by AI.**
-
-I ran it solo. What is mine is the direction: deciding what problem was worth solving, what
-the tools should be, what "trustworthy" had to mean concretely, how to verify it, and how it
-compares to what the engine already ships. What is not mine is most of the C++ — I specified
-and evaluated it rather than typing it.
-
-I am stating that plainly and at the top because the alternative is worse. A reader who
-discovers it later discounts everything else on this site, and rightly. If you want to judge
-my C++, read [FlexXR](../flex-xr-framework/) or [Namestead](../namestead/) — both are mine,
-line by line.
-
-What it does evidence is still useful: framing an open-ended problem, designing an API
-surface, deciding what a tool must refuse to do, and auditing a system hard enough to keep
-finding real defects in it.
-
 ## The research question
 
 An agent that can edit your Unreal project is easy to demonstrate and hard to trust. The
