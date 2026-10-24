@@ -131,4 +131,3 @@ That whole exercise is the research output, more than the plugin is.
   nothing and agreed with itself on read-back. Each had been green for months. That is the
   honest state of it, and it is also the argument for why the trustworthiness work is the
   interesting part.
-- **One developer's projects.** What it needs most is mileage on codebases that are not mine.
