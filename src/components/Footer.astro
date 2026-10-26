@@ -1,0 +1,79 @@
+---
+import { site } from '../data/site';
+import { url } from '../lib/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container inner">
+    <div>
+      <p class="name">{site.name}</p>
+      <p class="faint small">{site.role} · {site.location} · {site.openTo}</p>
+    </div>
+
+    <ul class="links">
+      <li><a href={`mailto:${site.email}`}>Email</a></li>
+      <li>
+        <a href={site.github} rel="noopener noreferrer" target="_blank">GitHub</a>
+      </li>
+      {
+        site.linkedin && (
+          <li>
+            <a href={site.linkedin} rel="noopener noreferrer" target="_blank">
+              LinkedIn
+            </a>
+          </li>
+        )
+      }
+      <li><a href={url('/projects')}>Projects</a></li>
+    </ul>
+
+    <p class="faint small meta">
+      &copy; {year} {site.name}. Built with Astro, deployed on GitHub Pages.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-sunken);
+    padding-block: var(--space-6);
+    margin-top: var(--space-7);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-5);
+  }
+
+  .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .small {
+    font-size: 0.84rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    list-style: none;
+    font-size: 0.9rem;
+  }
+
+  .meta {
+    flex-basis: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.79rem;
+    letter-spacing: 0.02em;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+  }
+</style>

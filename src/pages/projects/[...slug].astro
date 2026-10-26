@@ -1,0 +1,326 @@
+---
+import { render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectVisual from '../../components/ProjectVisual.astro';
+import ProjectLinks from '../../components/ProjectLinks.astro';
+import StatusBreakdown from '../../components/StatusBreakdown.astro';
+import VideoGallery from '../../components/VideoGallery.astro';
+import ScreenshotGrid from '../../components/ScreenshotGrid.astro';
+import { getPublishedProjects } from '../../lib/projects';
+import { url } from '../../lib/url';
+
+/*
+ * Only published projects get a route. An unapproved entry therefore produces
+ * no page at all - not a hidden one - and nothing from its Markdown reaches
+ * dist/.
+ */
+export const getStaticPaths = (async () => {
+  const projects = await getPublishedProjects();
+
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: {
+      project,
+      previous: projects[i - 1] ?? null,
+      next: projects[i + 1] ?? null,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project, previous, next } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+
+const facts = [
+  { label: 'Category', value: data.category },
+  { label: 'Status', value: data.statusLabel },
+];
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  path={`/projects/${project.id}`}
+  type="article"
+>
+  <article>
+    <header class="head">
+      <div class="container narrow">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href={url('/projects')}>Projects</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{data.title}</span>
+        </nav>
+
+        <p class="kicker">{data.category}</p>
+        <h1>{data.title}</h1>
+        <p class="tagline">{data.tagline}</p>
+
+        <dl class="facts">
+          {
+            facts.map((fact) => (
+              <div>
+                <dt>{fact.label}</dt>
+                <dd>
+                  {fact.label === 'Status' ? (
+                    <span class="status" data-state={data.status}>
+                      {fact.value}
+                    </span>
+                  ) : (
+                    fact.value
+                  )}
+                </dd>
+              </div>
+            ))
+          }
+          <div class="wide">
+            <dt>My role</dt>
+            <dd>{data.role}</dd>
+          </div>
+          <div class="wide">
+            <dt>Technologies</dt>
+            <dd>
+              <ul class="tags">
+                {data.technologies.map((tech) => <li class="tag">{tech}</li>)}
+              </ul>
+            </dd>
+          </div>
+          {
+            data.links.length > 0 && (
+              <div class="wide">
+                <dt>Links</dt>
+                <dd>
+                  <ProjectLinks links={data.links} variant="block" />
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+      </div>
+    </header>
+
+    <div class="container narrow body">
+      <div class="visual">
+        {
+          data.videos.length > 0 ? (
+            <VideoGallery videos={data.videos} />
+          ) : (
+            <ProjectVisual
+              cover={data.cover}
+              coverAlt={data.coverAlt}
+              diagram={data.diagram}
+              title={data.title}
+              variant="full"
+              loading="eager"
+            />
+          )
+        }
+      </div>
+
+      {
+        data.screenshots.length > 0 && (
+          <div class="shots">
+            <ScreenshotGrid screenshots={data.screenshots} />
+          </div>
+        )
+      }
+
+      {
+        /*
+         * A project with footage leads with it, but an architecture diagram
+         * explains something the footage cannot. Show both: what it does, then
+         * how it is put together.
+         */
+        data.videos.length > 0 && data.diagram && (
+          <div class="secondary-visual">
+            <ProjectVisual diagram={data.diagram} title={data.title} variant="full" />
+          </div>
+        )
+      }
+
+      {
+        data.statusBreakdown.length > 0 && (
+          <section class="breakdown-section" aria-labelledby="impl-status">
+            <h2 id="impl-status">Implementation status</h2>
+            <p class="muted measure">
+              What is finished, what is half-built, and what was left out on purpose.
+            </p>
+            <StatusBreakdown
+              rows={data.statusBreakdown}
+              caption={`Implementation status for ${data.title}`}
+            />
+          </section>
+        )
+      }
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      {
+        (previous || next) && (
+          <nav class="pager" aria-label="Other projects">
+            {previous ? (
+              <a class="card pager-link" href={url(`/projects/${previous.id}`)}>
+                <span class="dir">&larr; Previous</span>
+                <span class="name">{previous.data.title}</span>
+              </a>
+            ) : (
+              <span />
+            )}
+            {next && (
+              <a class="card pager-link next" href={url(`/projects/${next.id}`)}>
+                <span class="dir">Next &rarr;</span>
+                <span class="name">{next.data.title}</span>
+              </a>
+            )}
+          </nav>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .head {
+    padding-block: clamp(2rem, 1.5rem + 3vw, 3.5rem);
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(50rem 22rem at 10% -20%, rgb(79 210 255 / 5%), transparent 70%), var(--bg);
+  }
+
+  .crumbs {
+    display: flex;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    margin-bottom: var(--space-5);
+  }
+
+  .crumbs [aria-current='page'] {
+    color: var(--text-muted);
+  }
+
+  h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .tagline {
+    font-size: clamp(1.02rem, 0.98rem + 0.4vw, 1.18rem);
+    color: var(--text-muted);
+    max-width: var(--measure);
+    text-wrap: pretty;
+  }
+
+  .facts {
+    display: grid;
+    gap: var(--space-4) var(--space-6);
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (min-width: 40rem) {
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .facts .wide {
+      grid-column: 1 / -1;
+    }
+  }
+
+  dt {
+    font-family: var(--font-mono);
+    font-size: 0.77rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: var(--space-2);
+  }
+
+  dd {
+    font-size: 0.94rem;
+    color: var(--text-muted);
+    max-width: var(--measure);
+  }
+
+  .body {
+    padding-block: clamp(2rem, 1.5rem + 3vw, 3.5rem);
+  }
+
+  .visual {
+    margin-bottom: var(--space-8);
+  }
+
+  .shots {
+    margin-top: calc(var(--space-8) * -1 + var(--space-6));
+    margin-bottom: var(--space-8);
+  }
+
+  .secondary-visual {
+    margin-top: calc(var(--space-8) * -1 + var(--space-7));
+    margin-bottom: var(--space-8);
+  }
+
+  .breakdown-section {
+    margin-bottom: var(--space-8);
+  }
+
+  .breakdown-section h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .breakdown-section p {
+    margin-bottom: var(--space-4);
+    font-size: 0.94rem;
+  }
+
+  .pager {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (min-width: 40rem) {
+    .pager {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: var(--space-4);
+  }
+
+  .pager-link:hover {
+    text-decoration: none;
+  }
+
+  .pager-link.next {
+    text-align: right;
+  }
+
+  .dir {
+    font-family: var(--font-mono);
+    font-size: 0.77rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .name {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .pager-link:hover .name {
+    color: var(--accent-bright);
+  }
+</style>

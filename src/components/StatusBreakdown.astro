@@ -1,0 +1,168 @@
+---
+import { BREAKDOWN_LABELS, type Project } from '../lib/projects';
+
+/*
+ * The honest status table. A single "in progress" badge tells an interviewer
+ * nothing; this says which parts are finished, which are half-built, and which
+ * were dropped on purpose - the last column being the one worth discussing.
+ */
+
+interface Props {
+  rows: Project['data']['statusBreakdown'];
+  caption?: string;
+}
+
+const { rows, caption } = Astro.props;
+---
+
+{
+  rows.length > 0 && (
+    <div class="breakdown">
+      <table>
+        <caption class="visually-hidden">{caption ?? 'Implementation status by area'}</caption>
+        <thead>
+          <tr>
+            <th scope="col">Area</th>
+            <th scope="col">State</th>
+            <th scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              <td>
+                <span class="status" data-break={row.state}>
+                  {BREAKDOWN_LABELS[row.state]}
+                </span>
+              </td>
+              <td class="note">{row.note ?? ''}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+<style>
+  .breakdown {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  thead th {
+    font-family: var(--font-mono);
+    font-size: 0.77rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    font-weight: 500;
+    background: var(--bg-sunken);
+    white-space: nowrap;
+  }
+
+  tbody th {
+    font-weight: 500;
+    color: var(--text);
+    min-width: 12rem;
+  }
+
+  .note {
+    color: var(--text-muted);
+    min-width: 18rem;
+  }
+
+  .status[data-break='done']::before {
+    background: var(--ok);
+  }
+
+  .status[data-break='in-progress']::before {
+    background: var(--progress);
+  }
+
+  .status[data-break='not-started']::before {
+    background: var(--border-strong);
+  }
+
+  .status[data-break='dropped']::before {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--text-faint);
+  }
+
+  /*
+   * On a phone the third column is the one worth reading, and it is the one a
+   * horizontally scrolling table hides. Below this width each row becomes a
+   * stacked block instead: area, state, note. The cells are self-describing,
+   * so dropping the header row loses nothing.
+   */
+  @media (max-width: 46rem) {
+    .breakdown {
+      overflow-x: visible;
+    }
+
+    table,
+    tbody,
+    tbody tr,
+    tbody th,
+    tbody td {
+      display: block;
+      width: 100%;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tbody tr {
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr:last-child {
+      border-bottom: 0;
+    }
+
+    tbody th,
+    tbody td {
+      border: 0;
+      padding: 0;
+      min-width: 0;
+    }
+
+    tbody th {
+      margin-bottom: var(--space-2);
+    }
+
+    .note:not(:empty) {
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--border);
+    }
+
+    .note:empty {
+      display: none;
+    }
+  }
+</style>

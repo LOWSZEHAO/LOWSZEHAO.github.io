@@ -1,0 +1,127 @@
+---
+import { Image } from 'astro:assets';
+import FlexXrModules from './diagrams/FlexXrModules.astro';
+import NamesteadPipeline from './diagrams/NamesteadPipeline.astro';
+import UplinkLoop from './diagrams/UplinkLoop.astro';
+
+/*
+ * Picks a project's visual, in order of how much it actually tells a reader:
+ *
+ *   1. A real screenshot, when one exists and I am allowed to publish it.
+ *   2. A diagram drawn from the project's own documentation.
+ *   3. A labelled placeholder.
+ *
+ * There is deliberately no stock-image branch. A placeholder that says it is a
+ * placeholder is more honest than a picture of someone else's work.
+ *
+ * Covers are named in frontmatter as a string, so they are resolved here
+ * against src/assets. Astro then resizes each one and emits WebP with a
+ * srcset, rather than shipping a 1600px screenshot to fill a 300px card.
+ */
+
+const assets = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/projects/**/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true },
+);
+
+interface Props {
+  cover?: string | undefined;
+  coverAlt?: string | undefined;
+  diagram?: 'flexxr-modules' | 'namestead-pipeline' | 'uplink-loop' | undefined;
+  title: string;
+  variant?: 'compact' | 'full';
+  loading?: 'eager' | 'lazy';
+}
+
+const { cover, coverAlt, diagram, title, variant = 'compact', loading = 'lazy' } = Astro.props;
+
+const resolved = cover ? assets[`/src/assets/${cover}`]?.default : undefined;
+
+if (cover && !resolved) {
+  // Fail the build rather than ship a broken image slot.
+  throw new Error(
+    `Cover image not found: src/assets/${cover} (referenced by project "${title}"). ` +
+      `Add the file, or remove the \`cover\` field so the card falls back to its diagram.`,
+  );
+}
+
+// Card visuals render at 15-25rem wide depending on breakpoint, case-study
+// visuals at up to 48rem. `sizes` has to describe the rendered box, or the
+// browser picks the wrong srcset entry and the screenshot looks soft.
+const widths = variant === 'compact' ? [320, 640, 900] : [760, 1140, 1520];
+const sizes =
+  variant === 'compact'
+    ? '(min-width: 75rem) 25rem, (min-width: 52rem) 19rem, calc(100vw - 4rem)'
+    : '(min-width: 52rem) 48rem, calc(100vw - 3rem)';
+---
+
+{
+  resolved ? (
+    <Image
+      class="shot"
+      src={resolved}
+      alt={coverAlt ?? `Screenshot of ${title}`}
+      widths={widths}
+      sizes={sizes}
+      format="webp"
+      loading={loading}
+      decoding="async"
+    />
+  ) : diagram === 'flexxr-modules' ? (
+    <FlexXrModules variant={variant} />
+  ) : diagram === 'namestead-pipeline' ? (
+    <NamesteadPipeline variant={variant} />
+  ) : diagram === 'uplink-loop' ? (
+    <UplinkLoop variant={variant} />
+  ) : (
+    <div class="placeholder" role="img" aria-label={`No screenshot published yet for ${title}`}>
+      <span class="mark" aria-hidden="true" />
+      <span class="label">Screenshot pending</span>
+    </div>
+  )
+}
+
+<style>
+  .shot {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-sunken);
+  }
+
+  .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    aspect-ratio: 16 / 10;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    background:
+      repeating-linear-gradient(
+        135deg,
+        transparent,
+        transparent 9px,
+        rgb(255 255 255 / 1.6%) 9px,
+        rgb(255 255 255 / 1.6%) 10px
+      ),
+      var(--bg-sunken);
+  }
+
+  .mark {
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 3px;
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.83rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+</style>

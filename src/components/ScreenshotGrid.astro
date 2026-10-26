@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '../lib/projects';
+
+/*
+ * Stills under the lead visual, two up on a wide screen. Deliberately without
+ * captions: these are screenshots that explain themselves, and a caption under
+ * each would say what the reader can already see. Alt text still carries the
+ * description for anyone not seeing them.
+ */
+
+const assets = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/projects/**/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true },
+);
+
+interface Props {
+  screenshots: Project['data']['screenshots'];
+}
+
+const { screenshots } = Astro.props;
+
+const resolved = screenshots.map((shot) => {
+  const image = assets[`/src/assets/${shot.src}`]?.default;
+  if (!image) {
+    throw new Error(
+      `Screenshot not found: src/assets/${shot.src}. Add the file, or remove it from ` +
+        `the \`screenshots\` list.`,
+    );
+  }
+  return { ...shot, image };
+});
+---
+
+{
+  resolved.length > 0 && (
+    <ul class="grid">
+      {resolved.map((shot) => (
+        <li>
+          <Image
+            src={shot.image}
+            alt={shot.alt}
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 46rem) 24rem, calc(100vw - 3rem)"
+            format="webp"
+            loading="lazy"
+            decoding="async"
+          />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .grid {
+    list-style: none;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 46rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  li :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-sunken);
+  }
+</style>

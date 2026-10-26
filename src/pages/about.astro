@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Skills from '../components/Skills.astro';
+import Contact from '../components/Contact.astro';
+import { site, experience, education, languages } from '../data/site';
+---
+
+<BaseLayout
+  title="About"
+  description={`${site.name} — background, experience and technical skills. Unreal Engine C++ developer working on XR interaction systems and editor tooling.`}
+  path="/about"
+>
+  <section class="section">
+    <div class="container narrow">
+      <p class="kicker">About</p>
+      <h1>Low Sze Hao</h1>
+      <p class="lead">
+        Unreal Engine developer in {site.location}, moving from building VR experiences towards
+        building the systems underneath them.
+      </p>
+
+      <div class="prose">
+        <p>
+          {site.experienceSummary}, all of it on industrial VR training: applications where
+          someone rehearses a procedure that is dangerous or impractical to practise for real,
+          and has to be assessed on it.
+        </p>
+        <p>
+          That shaped how I think about interaction. In a game, a door that behaves slightly
+          differently each time is a texture. In training it is a defect — a procedure that
+          cannot reproduce exactly cannot be validated or scored. That problem moved me from
+          assembling behaviour in Blueprint to designing it in C++.
+        </p>
+
+        <h2>What I am looking for</h2>
+        <p>
+          Gameplay programming, XR and simulation, or engine tooling.
+        </p>
+        <p>
+          On the gameplay side: combat and ability systems built on GAS, skills configured as
+          data rather than code, and interfaces that stay in step with the systems behind
+          them. On the XR side: interaction frameworks and training simulation.
+        </p>
+        <p>
+          Most of my work is in Unreal. I am open to Unity roles too — the engine differs, the
+          systems work does not.
+        </p>
+        <p>
+          I am most useful on the parts other people would rather not own: the interaction
+          layer, the tooling, the thing that has to be correct rather than impressive.
+        </p>
+
+        {
+          experience.length > 0 && (
+            <>
+              <h2>Experience</h2>
+              {experience.map((entry) => (
+                <div class="entry">
+                  <h3>{entry.role}</h3>
+                  <p class="entry-meta">
+                    {[entry.employer, entry.period, entry.location].filter(Boolean).join(' · ')}
+                  </p>
+                  <ul>
+                    {entry.points.map((point) => (
+                      <li>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </>
+          )
+        }
+
+        <h2>Education</h2>
+        <ul>
+          {
+            education.map((entry) => (
+              <li>
+                <strong>{entry.qualification}</strong>
+                {[entry.institution, entry.period].filter(Boolean).length > 0 && (
+                  <span class="faint">
+                    {' — '}
+                    {[entry.institution, entry.period].filter(Boolean).join(', ')}
+                  </span>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+
+        <h2>Languages</h2>
+        <p>{languages.join(' · ')}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="skills" aria-labelledby="skills-heading">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="skills-heading">Technical skills</h2>
+      </div>
+
+      <Skills />
+    </div>
+  </section>
+
+  <section class="section" id="contact" aria-labelledby="contact-heading">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Contact</p>
+        <h2 id="contact-heading">Get in touch</h2>
+      </div>
+
+      <Contact />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .lead {
+    font-size: clamp(1.05rem, 1rem + 0.5vw, 1.25rem);
+    color: var(--text-muted);
+    max-width: var(--measure);
+    margin-bottom: var(--space-7);
+    text-wrap: pretty;
+  }
+
+  .entry {
+    margin-top: var(--space-5);
+  }
+
+  .entry-meta {
+    font-family: var(--font-mono);
+    font-size: 0.83rem;
+    color: var(--text-faint);
+    margin-top: var(--space-1);
+  }
+</style>

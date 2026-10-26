@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Skills from '../components/Skills.astro';
+import Contact from '../components/Contact.astro';
+import { site } from '../data/site';
+import { url } from '../lib/url';
+import { getFeaturedProjects, getPublishedProjects } from '../lib/projects';
+
+const featured = await getFeaturedProjects();
+const published = await getPublishedProjects();
+
+/*
+ * Featured projects are whatever is both published and flagged. When a drafted
+ * project is unavailable the list is simply shorter - there is no placeholder
+ * card standing in for it.
+ */
+const hasMore = published.length > featured.length;
+---
+
+<BaseLayout
+  title={site.name}
+  description={site.metaDescription}
+  path="/"
+>
+  <Hero />
+
+  <section class="section" id="projects" aria-labelledby="projects-heading">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Selected work</p>
+        <h2 id="projects-heading">Projects</h2>
+        <p>What I built, the decisions behind it, and what is unfinished.</p>
+      </div>
+
+      {
+        featured.length > 0 ? (
+          <div class="project-list">
+            {featured.map((project, i) => (
+              <ProjectCard project={project} feature={i === 0} eager={i === 0} />
+            ))}
+          </div>
+        ) : (
+          <p class="muted">No projects are published yet.</p>
+        )
+      }
+
+      {
+        hasMore && (
+          <p class="more">
+            <a class="textlink" href={url('/projects')}>
+              See all projects <span class="arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section" id="skills" aria-labelledby="skills-heading">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="skills-heading">Technical skills</h2>
+      </div>
+
+      <Skills />
+    </div>
+  </section>
+
+  <section class="section" id="about" aria-labelledby="about-heading">
+    <div class="container">
+      <div class="about-grid">
+        <div class="section-head">
+          <p class="kicker">About</p>
+          <h2 id="about-heading">Background</h2>
+        </div>
+
+        <div class="stack">
+          <p>
+            Unreal Engine developer in {site.location}, with{' '}
+            {site.experienceSummary.toLowerCase()} building industrial VR training simulations.
+          </p>
+          <p class="muted">
+            My work has moved from building VR environments towards building the systems
+            underneath them. The projects here are the evidence: an XR interaction framework
+            written in C++ rather than assembled in Blueprint, and an editor plugin whose
+            hardest problems were validation and refusing to do damage.
+          </p>
+          <p>
+            <a class="textlink" href={url('/about')}>
+              More about my background <span class="arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact" aria-labelledby="contact-heading">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Contact</p>
+        <h2 id="contact-heading">Get in touch</h2>
+      </div>
+
+      <Contact />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .more {
+    margin-top: var(--space-5);
+  }
+
+  .about-grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .about-grid .section-head {
+    margin-bottom: 0;
+  }
+
+  .about-grid .stack {
+    max-width: var(--measure);
+  }
+
+  @media (min-width: 52rem) {
+    .about-grid {
+      grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+      gap: var(--space-7);
+    }
+  }
+</style>

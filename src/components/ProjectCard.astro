@@ -1,0 +1,222 @@
+---
+import { url } from '../lib/url';
+import { type Project } from '../lib/projects';
+import ProjectVisual from './ProjectVisual.astro';
+import ProjectLinks from './ProjectLinks.astro';
+
+interface Props {
+  project: Project;
+  /** The first card on the home page gets the larger treatment. */
+  feature?: boolean;
+  /** Eager-load only the first visual above the fold. */
+  eager?: boolean;
+}
+
+const { project, feature = false, eager = false } = Astro.props;
+const { data, id } = project;
+const href = url(`/projects/${id}`);
+---
+
+<article class:list={['card project', { feature }]}>
+  <div class="visual">
+    <ProjectVisual
+      cover={data.cover}
+      coverAlt={data.coverAlt}
+      diagram={data.diagram}
+      title={data.title}
+      variant="compact"
+      loading={eager ? 'eager' : 'lazy'}
+    />
+  </div>
+
+  <div class="body">
+    <header>
+      <p class="meta">
+        <span class="category">{data.category}</span>
+        <span class="status" data-state={data.status}>{data.statusLabel}</span>
+        {
+          /* Tells a recruiter there is something to watch before they click. */
+          data.videos.length > 0 && (
+            <span class="videos">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              {data.videos.length} {data.videos.length === 1 ? 'video' : 'videos'}
+            </span>
+          )
+        }
+      </p>
+      <h3><a class="cover-link" href={href}>{data.title}</a></h3>
+      {/* One description per card. `summary` is the meta description, not card copy. */}
+      <p class="tagline">{data.tagline}</p>
+    </header>
+
+    <ul class="tags">
+      {data.technologies.slice(0, feature ? 10 : 6).map((tech) => <li class="tag">{tech}</li>)}
+    </ul>
+
+    <footer>
+      <span class="textlink cta" aria-hidden="true">
+        Read the case study <span class="arrow">&rarr;</span>
+      </span>
+      <ProjectLinks links={data.links} />
+    </footer>
+  </div>
+</article>
+
+<style>
+  /*
+   * The whole card is the link. One real anchor - the title - stretches its
+   * ::after over the card, so there is a single entry in the accessibility
+   * tree rather than three anchors to the same page, and the hit area is the
+   * card rather than the title and the image.
+   */
+  .project {
+    position: relative;
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    align-items: start;
+  }
+
+  .project:hover {
+    border-color: var(--accent-edge);
+    background: var(--surface-raised);
+  }
+
+  .cover-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    z-index: 1;
+  }
+
+  /* Focus lands on the title link, so show the ring around the whole card. */
+  .project:has(.cover-link:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .cover-link:focus-visible {
+    outline: none;
+  }
+
+  /* The source and store links sit above the overlay and stay clickable. */
+  .project :global(.links) {
+    position: relative;
+    z-index: 2;
+  }
+
+  .visual {
+    display: block;
+    border-radius: var(--radius-sm);
+  }
+
+  .cta {
+    color: var(--accent);
+  }
+
+  .project:hover .cta .arrow {
+    transform: translateX(3px);
+  }
+
+  .visual:hover {
+    text-decoration: none;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+
+  .category {
+    font-family: var(--font-mono);
+    font-size: 0.79rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .videos {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.79rem;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: clamp(1.2rem, 1.1rem + 0.5vw, 1.45rem);
+    letter-spacing: -0.024em;
+  }
+
+  h3 a {
+    color: var(--text);
+  }
+
+  .project:hover h3 a {
+    color: var(--accent-bright);
+  }
+
+  h3 a:hover {
+    color: var(--accent-bright);
+    text-decoration: none;
+  }
+
+  .tagline {
+    margin-top: var(--space-3);
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-5);
+    margin-top: auto;
+    padding-top: var(--space-2);
+  }
+
+  /* Side-by-side once there is room for the visual to be worth showing. */
+  @media (min-width: 52rem) {
+    .project {
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      gap: var(--space-6);
+    }
+
+    .project.feature {
+      grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
+      padding: var(--space-6);
+    }
+  }
+
+  /*
+   * On a desktop the text column stops at its reading measure, which left
+   * several hundred pixels empty beside it while the screenshot stayed at
+   * thumbnail size. Spend the extra width on the visual, where a dense editor
+   * screenshot becomes legible rather than grey mush.
+   */
+  @media (min-width: 75rem) {
+    .project {
+      grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+    }
+
+    .project.feature {
+      grid-template-columns: minmax(0, 25rem) minmax(0, 1fr);
+    }
+  }
+</style>

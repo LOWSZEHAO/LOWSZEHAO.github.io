@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getGroupedProjects } from '../../lib/projects';
+import { site } from '../../data/site';
+
+const sections = await getGroupedProjects();
+let cardIndex = 0;
+---
+
+<BaseLayout
+  title="Projects"
+  description={`Engineering case studies by ${site.name}: Unreal Engine C++ XR frameworks, editor tooling, and VR training simulation.`}
+  path="/projects"
+>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Case studies</p>
+        <h1>Projects</h1>
+        <p>Each one states what works today, what I built, and what is unfinished.</p>
+      </div>
+
+      {
+        sections.length > 0 ? (
+          sections.map((group) => (
+            <section class="group" aria-labelledby={`group-${group.key}`}>
+              <div class="group-head">
+                <h2 id={`group-${group.key}`}>{group.title}</h2>
+              </div>
+
+              <div class="project-list">
+                {group.projects.map((project) => (
+                  <ProjectCard project={project} eager={cardIndex++ === 0} />
+                ))}
+              </div>
+            </section>
+          ))
+        ) : (
+          <p class="muted">No projects are published yet.</p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .group + .group {
+    margin-top: var(--space-8);
+  }
+
+  .group-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .group-head h2 {
+    font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  }
+
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+</style>

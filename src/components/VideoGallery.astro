@@ -1,0 +1,120 @@
+---
+import VideoEmbed from './VideoEmbed.astro';
+import type { Project } from '../lib/projects';
+
+/*
+ * A project's demo clips. The first is full width because it is the one most
+ * people will actually watch; the rest sit two-up on a wide screen.
+ *
+ * Each still is served from this site, so opening the page makes no request to
+ * YouTube at all until someone presses play.
+ */
+
+interface Props {
+  videos: Project['data']['videos'];
+}
+
+const { videos } = Astro.props;
+const [lead, ...rest] = videos;
+---
+
+{
+  lead && (
+    <div class="gallery">
+      <figure class="lead">
+        <VideoEmbed id={lead.id} title={lead.title} poster={lead.poster} loading="eager" />
+        {lead.description && <figcaption>{lead.description}</figcaption>}
+      </figure>
+
+      {rest.length > 0 && (
+        <div class="rest">
+          {rest.map((video) => (
+            <figure>
+              <VideoEmbed id={video.id} title={video.title} poster={video.poster} />
+              <figcaption>
+                <span class="vtitle">{video.title}</span>
+                {video.description && <span class="vdesc">{video.description}</span>}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+<style>
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figcaption {
+    margin-top: var(--space-3);
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    max-width: var(--measure);
+  }
+
+  /*
+   * The secondary clips are small enough that an overlaid title covers the
+   * frame and wraps onto two lines. Their titles go underneath instead; the
+   * lead keeps its overlay, where there is room for it.
+   */
+  .rest :global(.caption) {
+    display: none;
+  }
+
+  .rest figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-top: var(--space-3);
+  }
+
+  .vtitle {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.012em;
+  }
+
+  .vdesc {
+    color: var(--text-muted);
+  }
+
+  .rest {
+    display: grid;
+    gap: var(--space-5) var(--space-4);
+  }
+
+  @media (min-width: 34rem) {
+    .rest {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /*
+   * Three across on a wide screen. With one lead plus three, a two-column
+   * grid strands the last one beside an empty cell; three columns fills the
+   * row. A lone item still centres rather than hugging the left edge.
+   */
+  @media (min-width: 52rem) {
+    .rest {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .rest figcaption {
+      font-size: 0.82rem;
+    }
+
+    .rest > figure:only-child {
+      grid-column: 2;
+    }
+  }
+</style>

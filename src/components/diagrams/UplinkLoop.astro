@@ -1,0 +1,139 @@
+---
+/*
+ * Uplink's development loop, as documented in its README. Used instead of a
+ * screenshot because the project has no meaningful UI to photograph - it is a
+ * tool surface an agent drives - and a "screenshot pending" placeholder tells
+ * a reader nothing.
+ */
+
+interface Props {
+  variant?: 'compact' | 'full';
+}
+
+const { variant = 'full' } = Astro.props;
+
+const steps = [
+  { name: 'understand', note: 'read an unfamiliar project' },
+  { name: 'author', note: 'change it' },
+  { name: 'run', note: 'start a play session' },
+  { name: 'observe', note: 'watch what happens' },
+  { name: 'assert', note: 'decide whether that was right' },
+  { name: 'repair', note: 'fix what was not' },
+];
+---
+
+<figure class:list={['loop', variant]}>
+  <ol>
+    {
+      steps.map((step, i) => (
+        <li>
+          <span class="idx">{String(i + 1).padStart(2, '0')}</span>
+          <span class="body">
+            <span class="name">{step.name}</span>
+            {variant === 'full' && <span class="note">{step.note}</span>}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <p class="cycle" aria-hidden="true">
+    <span class="arrow">&#8630;</span> repeats
+  </p>
+
+  {
+    variant === 'full' && (
+      <figcaption>
+        Individually these are just tools. What they add up to is a loop that closes without
+        leaving the conversation. Each step is one round trip, so the loop is scripted rather
+        than autonomous.
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .loop {
+    margin: 0;
+  }
+
+  ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--border);
+  }
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    background: var(--surface);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .idx {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--accent);
+    flex: none;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+
+  .name {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .note {
+    font-size: 0.83rem;
+    color: var(--text-faint);
+  }
+
+  .cycle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    margin-top: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-faint);
+  }
+
+  .cycle .arrow {
+    color: var(--accent);
+    font-size: 1.05em;
+  }
+
+  figcaption {
+    margin-top: var(--space-3);
+    font-size: 0.86rem;
+    color: var(--text-faint);
+    max-width: var(--measure);
+  }
+
+  .compact li {
+    padding: 0.42rem var(--space-3);
+  }
+
+  .compact .name {
+    font-size: 0.86rem;
+  }
+
+  .compact .cycle {
+    font-size: 0.78rem;
+  }
+</style>

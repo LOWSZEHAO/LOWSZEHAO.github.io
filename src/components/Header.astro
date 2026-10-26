@@ -1,0 +1,133 @@
+---
+import { site, nav } from '../data/site';
+import { url } from '../lib/url';
+
+const current = Astro.url.pathname;
+
+/** A nav item is current when the path matches, ignoring trailing slashes. */
+function isCurrent(href: string): boolean {
+  if (href.includes('#')) return false;
+  const target = url(href).replace(/\/+$/, '');
+  const here = current.replace(/\/+$/, '');
+  return here === target || (target !== url('/').replace(/\/+$/, '') && here.startsWith(`${target}/`));
+}
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a class="brand" href={url('/')}>
+      <span class="brand-name">{site.name}</span>
+      <span class="brand-role">{site.role}</span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={url(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 4rem;
+    flex-wrap: wrap;
+    padding-block: var(--space-3);
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    color: var(--text);
+  }
+
+  .brand:hover {
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .brand:hover .brand-role {
+    color: var(--accent);
+  }
+
+  .brand-name {
+    font-weight: 600;
+    font-size: 0.98rem;
+    letter-spacing: -0.015em;
+  }
+
+  .brand-role {
+    font-family: var(--font-mono);
+    font-size: 0.83rem;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    transition: color var(--dur) var(--ease);
+  }
+
+  nav ul {
+    display: flex;
+    align-items: center;
+    gap: clamp(var(--space-3), 2vw, var(--space-5));
+    list-style: none;
+  }
+
+  nav a {
+    position: relative;
+    display: block;
+    padding-block: 0.3rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  nav a:hover {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--text);
+  }
+
+  nav a[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.1rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  @media (max-width: 26rem) {
+    .brand-role {
+      display: none;
+    }
+
+    nav a {
+      font-size: 0.86rem;
+    }
+  }
+</style>
