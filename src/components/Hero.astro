@@ -2,14 +2,13 @@
 import { Image } from 'astro:assets';
 import { site } from '../data/site';
 import { url } from '../lib/url';
-import heroStill from '../assets/projects/vr-training/worksite-safety.jpg';
+import portrait from '../assets/portrait.jpg';
 
 /*
  * Two columns on a wide screen. The copy alone left roughly half the first
- * viewport empty and pushed the first piece of actual work below the fold,
- * which is the wrong first impression for a visual discipline. The still is a
- * real frame from shipped work and links to its case study, so it earns its
- * place rather than decorating.
+ * viewport empty, so the second column carries the portrait. The source is
+ * near-square (1986x2000), which is why the frame is 1:1 - it crops under a
+ * percent rather than cutting into the subject.
  */
 ---
 
@@ -54,22 +53,16 @@ import heroStill from '../assets/projects/vr-training/worksite-safety.jpg';
       <p class="availability faint">{site.availability}</p>
     </div>
 
-    <figure class="still">
-      <a href={url('/projects/industrial-vr-training')}>
-        <Image
-          src={heroStill}
-          alt="First-person view in VR of a gloved hand clipping a harness carabiner onto a ladder rung, with the on-screen instruction 'Attach on ladder'."
-          widths={[440, 880, 1280]}
-          sizes="(min-width: 64rem) 26rem, calc(100vw - 3rem)"
-          format="webp"
-          loading="eager"
-          fetchpriority="high"
-        />
-        <figcaption>
-          <span class="label">Worksite safety — fall arrest</span>
-          <span class="meta">VR training module · VirtualX</span>
-        </figcaption>
-      </a>
+    <figure class="portrait">
+      <Image
+        src={portrait}
+        alt={`${site.name}, ${site.role}`}
+        widths={[420, 840, 1260]}
+        sizes="(min-width: 64rem) 24rem, calc(100vw - 3rem)"
+        format="webp"
+        loading="eager"
+        fetchpriority="high"
+      />
     </figure>
   </div>
 </section>
@@ -138,56 +131,26 @@ import heroStill from '../assets/projects/vr-training/worksite-safety.jpg';
     max-width: 56ch;
   }
 
-  /* --- the still ---------------------------------------------------------- */
+  /* --- the portrait -------------------------------------------------------- */
 
-  .still {
+  .portrait {
     margin: 0;
-  }
-
-  .still a {
-    display: block;
+    /* Capped so a square frame does not tower over the copy column, and
+       pushed right so it stays aligned with the grid edge. */
+    width: 100%;
+    max-width: 24rem;
+    margin-inline-start: auto;
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
     background: var(--bg-sunken);
-    transition: border-color var(--dur) var(--ease);
   }
 
-  .still a:hover {
-    text-decoration: none;
-    border-color: var(--accent-edge);
-  }
-
-  .still :global(img) {
+  .portrait :global(img) {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
-  }
-
-  figcaption {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    padding: var(--space-3) var(--space-4);
-    border-top: 1px solid var(--border);
-    background: var(--surface);
-  }
-
-  .label {
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .meta {
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-    color: var(--text-faint);
-  }
-
-  .still a:hover .label {
-    color: var(--accent-bright);
   }
 </style>

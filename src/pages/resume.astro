@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import { url } from '../lib/url';
+
+/*
+ * The resume is served as the PDF itself rather than re-typed as HTML, so
+ * what a recruiter reads here and what lands in their inbox cannot drift
+ * apart. One file, one source of truth.
+ *
+ * <object> renders inline wherever the browser has a PDF viewer and falls
+ * back to its children where it does not - which is most phones. The
+ * fallback is a real download button, not an apology.
+ *
+ * site.cv is typed `string | null`; the page is only reachable when it is
+ * set, and the non-null assertion is safe because of the guard below.
+ */
+const pdf = site.cv ? url(site.cv) : null;
+---
+
+<BaseLayout
+  title="Resume"
+  description={`${site.name} — resume. Unreal Engine C++ developer: VR training simulation, XR interaction systems and Unreal editor tooling.`}
+  path="/resume"
+>
+  <section class="section">
+    <div class="container narrow">
+      <p class="kicker">Resume</p>
+      <h1>Low Sze Hao</h1>
+      <p class="lead">The same document I send with an application.</p>
+
+      {
+        pdf && (
+          <>
+            <div class="btn-row">
+              <a class="btn btn--primary" href={pdf} download>
+                Download PDF
+              </a>
+              <a class="btn" href={pdf} target="_blank" rel="noopener noreferrer">
+                Open in a new tab <span class="ext" aria-hidden="true">&#8599;</span>
+              </a>
+            </div>
+
+            <div class="viewer">
+              {/* Fragment hints fit the page to width and drop the thumbnail
+                  rail. Viewers that do not understand them ignore them. */}
+              <object
+                data={`${pdf}#view=FitH&navpanes=0`}
+                type="application/pdf"
+                aria-label={`${site.name} resume`}
+              >
+                <div class="fallback">
+                  <p>This browser cannot show a PDF inline — most phones cannot.</p>
+                  <a class="btn btn--primary" href={pdf} download>
+                    Download the PDF
+                  </a>
+                </div>
+              </object>
+            </div>
+          </>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lead {
+    font-size: clamp(1.05rem, 1rem + 0.5vw, 1.25rem);
+    color: var(--text-muted);
+    max-width: var(--measure);
+    margin-bottom: var(--space-6);
+    text-wrap: pretty;
+  }
+
+  /*
+   * A fixed viewport rather than an A4 aspect ratio: at the width of this
+   * column a true 210:297 box is over 1300px tall, which buries the rest of
+   * the page. The PDF viewer scrolls inside this box instead.
+   */
+  .viewer {
+    margin-top: var(--space-6);
+    height: min(85vh, 58rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-sunken);
+  }
+
+  .viewer object {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    color: var(--text-muted);
+  }
+
+  .ext {
+    font-size: 0.8em;
+    color: currentColor;
+    opacity: 0.7;
+  }
+</style>

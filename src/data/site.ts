@@ -73,13 +73,15 @@ export const site = {
    */
 
   /*
-   * TODO: add a real CV.
-   *   1. Put the PDF at public/cv/Low-Sze-Hao-CV.pdf
-   *   2. Set this to '/cv/Low-Sze-Hao-CV.pdf'
-   * While it is null the "Download CV" button is hidden, so the site never
+   * The published resume. Setting this reveals the "Download CV" button in
+   * the hero and feeds the /resume page; null hides both, so the site never
    * offers a download that does not exist.
+   *
+   * Note this copy is the full CV, phone number and date of birth included.
+   * That was a deliberate choice - if you ever want a reduced web copy, the
+   * CV template marks the rows to drop.
    */
-  cv: null as string | null,
+  cv: '/cv/Low-Sze-Hao-Resume.pdf' as string | null,
 
   /* ---- metadata ---------------------------------------------------------- */
   metaDescription:
@@ -144,5 +146,6 @@ export const nav = [
   { label: 'Projects', href: '/projects' },
   { label: 'Skills', href: '/#skills' },
   { label: 'About', href: '/about' },
+  { label: 'Resume', href: '/resume' },
   { label: 'Contact', href: '/#contact' },
 ] as const;
