@@ -27,7 +27,6 @@ const pdf = site.cv ? url(site.cv) : null;
     <div class="container narrow">
       <p class="kicker">Resume</p>
       <h1>Low Sze Hao</h1>
-      <p class="lead">The same document I send with an application.</p>
 
       {
         pdf && (
@@ -65,12 +64,9 @@ const pdf = site.cv ? url(site.cv) : null;
 </BaseLayout>
 
 <style>
-  .lead {
-    font-size: clamp(1.05rem, 1rem + 0.5vw, 1.25rem);
-    color: var(--text-muted);
-    max-width: var(--measure);
-    margin-bottom: var(--space-6);
-    text-wrap: pretty;
+  /* The lead paragraph used to carry this gap in its margin-bottom. */
+  .btn-row {
+    margin-top: var(--space-6);
   }
 
   /*
