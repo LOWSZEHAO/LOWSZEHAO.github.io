@@ -58,7 +58,7 @@ import portrait from '../assets/portrait.jpg';
         src={portrait}
         alt={`${site.name}, ${site.role}`}
         widths={[420, 840, 1260]}
-        sizes="(min-width: 64rem) 24rem, calc(100vw - 3rem)"
+        sizes="(min-width: 64rem) 21rem, calc(100vw - 3rem)"
         format="webp"
         loading="eager"
         fetchpriority="high"
@@ -135,13 +135,13 @@ import portrait from '../assets/portrait.jpg';
 
   .portrait {
     margin: 0;
-    /* Capped so a square frame does not tower over the copy column, and
-       pushed right so it stays aligned with the grid edge. */
+    /* A circle reads heavier than a square at the same width, so this is
+       capped tighter than the 24rem the square used. */
     width: 100%;
-    max-width: 24rem;
+    max-width: 21rem;
     margin-inline-start: auto;
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: 50%;
     overflow: hidden;
     background: var(--bg-sunken);
   }
