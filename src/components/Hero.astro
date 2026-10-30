@@ -58,7 +58,12 @@ import portrait from '../assets/portrait.jpg';
         src={portrait}
         alt={`${site.name}, ${site.role}`}
         widths={[420, 840, 1260]}
-        sizes="(min-width: 64rem) 21rem, calc(100vw - 3rem)"
+        {/*
+          px, not rem. Lengths in `sizes` resolve rem against the *initial*
+          16px root, not this site's 125% root, so "21rem" asked for 336px
+          while the box renders at 420 and the browser upscaled to fill it.
+        */}
+        sizes="(min-width: 64rem) 420px, calc(100vw - 3rem)"
         format="webp"
         loading="eager"
         fetchpriority="high"
